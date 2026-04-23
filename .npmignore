@@ -1,0 +1,14 @@
+example/
+__tests__/
+*.test.ts
+*.test.tsx
+.github/
+.gitignore
+babel.config.js
+tsconfig.json
+tsconfig.build.json
+.eslintrc*
+.prettierrc*
+.editorconfig
+.yarn/
+.pnp.*

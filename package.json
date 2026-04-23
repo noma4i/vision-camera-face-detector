@@ -1,0 +1,65 @@
+{
+  "name": "@noma4i/vision-camera-face-detector",
+  "version": "1.0.0",
+  "description": "MLKit face detection frame processor plugin for VisionCamera V5 (Nitro)",
+  "source": "src/index",
+  "main": "lib/index",
+  "module": "lib/index",
+  "types": "lib/index.d.ts",
+  "react-native": "src/index",
+  "files": [
+    "src",
+    "lib",
+    "ios",
+    "android/build.gradle",
+    "android/CMakeLists.txt",
+    "android/src",
+    "nitrogen",
+    "nitro.json",
+    "VisionCameraFaceDetector.podspec",
+    "react-native.config.js",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "nitrogen": "nitrogen generate",
+    "build": "tsc -p tsconfig.build.json",
+    "clean": "rm -rf lib",
+    "typecheck": "tsc --noEmit",
+    "prepare": "tsc -p tsconfig.build.json"
+  },
+  "keywords": [
+    "react-native",
+    "vision-camera",
+    "face-detection",
+    "mlkit",
+    "nitro",
+    "frame-processor"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/noma4i/vision-camera-face-detector.git"
+  },
+  "bugs": {
+    "url": "https://github.com/noma4i/vision-camera-face-detector/issues"
+  },
+  "homepage": "https://github.com/noma4i/vision-camera-face-detector#readme",
+  "author": "noma4i",
+  "license": "MIT",
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*",
+    "react-native-nitro-modules": "*",
+    "react-native-vision-camera": ">=5.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.0",
+    "nitrogen": "^0.35.4",
+    "react": "^19.2.0",
+    "react-native": "^0.85.0",
+    "react-native-nitro-modules": "^0.35.4",
+    "react-native-vision-camera": "^5.0.4",
+    "typescript": "^5.9.3"
+  }
+}

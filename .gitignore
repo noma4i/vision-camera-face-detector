@@ -1,0 +1,63 @@
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+*.log
+
+# Build
+lib/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# iOS
+ios/Pods/
+ios/build/
+ios/.xcode.env.local
+ios/*.xcworkspace/xcuserdata/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.xcuserstate
+
+# Android
+android/build/
+android/.gradle/
+android/local.properties
+android/.idea/
+android/app/build/
+*.iml
+
+# Example
+example/node_modules/
+example/ios/Pods/
+example/ios/build/
+example/ios/.xcode.env.local
+example/android/build/
+example/android/.gradle/
+example/android/local.properties
+example/android/app/build/
+example/.xcode.env.local
+
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+
+# Env
+.env
+.env.local
