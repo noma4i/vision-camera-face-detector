@@ -311,11 +311,11 @@ const containsPoint = (rect: FaceRect, point: FacePoint, tolerancePx: number): b
   point.y <= rect.y + rect.height + tolerancePx
 );
 
-const overlaps = (a: FaceRect, b: FaceRect, tolerancePx: number): boolean => (
-  a.x < b.x + b.width + tolerancePx &&
-  a.x + a.width + tolerancePx > b.x &&
-  a.y < b.y + b.height + tolerancePx &&
-  a.y + a.height + tolerancePx > b.y
+const containsRect = (outer: FaceRect, inner: FaceRect, tolerancePx: number): boolean => (
+  inner.x >= outer.x - tolerancePx &&
+  inner.y >= outer.y - tolerancePx &&
+  inner.x + inner.width <= outer.x + outer.width + tolerancePx &&
+  inner.y + inner.height <= outer.y + outer.height + tolerancePx
 );
 
 export const evaluateFaceDetection = (
@@ -340,8 +340,9 @@ export const evaluateFaceDetection = (
   const isInsideGuide = Boolean(
     primaryFaceRect &&
       guideRect &&
-      (containsPoint(guideRect, primaryFaceCenter as FacePoint, tolerancePx) ||
-        overlaps(primaryFaceRect, guideRect, tolerancePx))
+      primaryFaceCenter &&
+      containsPoint(guideRect, primaryFaceCenter, tolerancePx) &&
+      containsRect(guideRect, primaryFaceRect, tolerancePx)
   );
 
   return {

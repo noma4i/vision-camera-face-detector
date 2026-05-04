@@ -62,11 +62,11 @@ namespace margelo::nitro::facedetector::bridge::swift {
   using std__shared_ptr_HybridFaceDetectorSpec_ = std::shared_ptr<HybridFaceDetectorSpec>;
   std::shared_ptr<HybridFaceDetectorSpec> create_std__shared_ptr_HybridFaceDetectorSpec_(void* NON_NULL swiftUnsafePointer) noexcept;
   void* NON_NULL get_std__shared_ptr_HybridFaceDetectorSpec_(std__shared_ptr_HybridFaceDetectorSpec_ cppType);
-  
+
   // pragma MARK: std::weak_ptr<HybridFaceDetectorSpec>
   using std__weak_ptr_HybridFaceDetectorSpec_ = std::weak_ptr<HybridFaceDetectorSpec>;
   inline std__weak_ptr_HybridFaceDetectorSpec_ weakify_std__shared_ptr_HybridFaceDetectorSpec_(const std::shared_ptr<HybridFaceDetectorSpec>& strong) noexcept { return strong; }
-  
+
   // pragma MARK: Result<void>
   using Result_void_ = Result<void>;
   inline Result_void_ create_Result_void_() noexcept {
@@ -75,7 +75,7 @@ namespace margelo::nitro::facedetector::bridge::swift {
   inline Result_void_ create_Result_void_(const std::exception_ptr& error) noexcept {
     return Result<void>::withError(error);
   }
-  
+
   // pragma MARK: std::optional<double>
   /**
    * Specialized version of `std::optional<double>`.
@@ -90,7 +90,7 @@ namespace margelo::nitro::facedetector::bridge::swift {
   inline double get_std__optional_double_(const std::optional<double>& optional) noexcept {
     return optional.value();
   }
-  
+
   // pragma MARK: std::vector<DetectedFace>
   /**
    * Specialized version of `std::vector<DetectedFace>`.
@@ -101,7 +101,7 @@ namespace margelo::nitro::facedetector::bridge::swift {
     vector.reserve(size);
     return vector;
   }
-  
+
   // pragma MARK: std::function<void(const FaceDetectionOutputResult& /* result */)>
   /**
    * Specialized version of `std::function<void(const FaceDetectionOutputResult&)>`.
@@ -123,7 +123,7 @@ namespace margelo::nitro::facedetector::bridge::swift {
   inline Func_void_FaceDetectionOutputResult_Wrapper wrap_Func_void_FaceDetectionOutputResult(Func_void_FaceDetectionOutputResult value) noexcept {
     return Func_void_FaceDetectionOutputResult_Wrapper(std::move(value));
   }
-  
+
   // pragma MARK: std::optional<std::function<void(const FaceDetectionOutputResult& /* result */)>>
   /**
    * Specialized version of `std::optional<std::function<void(const FaceDetectionOutputResult& / * result * /)>>`.
@@ -138,7 +138,7 @@ namespace margelo::nitro::facedetector::bridge::swift {
   inline std::function<void(const FaceDetectionOutputResult& /* result */)> get_std__optional_std__function_void_const_FaceDetectionOutputResult_____result______(const std::optional<std::function<void(const FaceDetectionOutputResult& /* result */)>>& optional) noexcept {
     return optional.value();
   }
-  
+
   // pragma MARK: std::shared_ptr<margelo::nitro::camera::HybridCameraOutputSpec>
   /**
    * Specialized version of `std::shared_ptr<margelo::nitro::camera::HybridCameraOutputSpec>`.
@@ -146,11 +146,11 @@ namespace margelo::nitro::facedetector::bridge::swift {
   using std__shared_ptr_margelo__nitro__camera__HybridCameraOutputSpec_ = std::shared_ptr<margelo::nitro::camera::HybridCameraOutputSpec>;
   std::shared_ptr<margelo::nitro::camera::HybridCameraOutputSpec> create_std__shared_ptr_margelo__nitro__camera__HybridCameraOutputSpec_(void* NON_NULL swiftUnsafePointer) noexcept;
   void* NON_NULL get_std__shared_ptr_margelo__nitro__camera__HybridCameraOutputSpec_(std__shared_ptr_margelo__nitro__camera__HybridCameraOutputSpec_ cppType);
-  
+
   // pragma MARK: std::weak_ptr<margelo::nitro::camera::HybridCameraOutputSpec>
   using std__weak_ptr_margelo__nitro__camera__HybridCameraOutputSpec_ = std::weak_ptr<margelo::nitro::camera::HybridCameraOutputSpec>;
   inline std__weak_ptr_margelo__nitro__camera__HybridCameraOutputSpec_ weakify_std__shared_ptr_margelo__nitro__camera__HybridCameraOutputSpec_(const std::shared_ptr<margelo::nitro::camera::HybridCameraOutputSpec>& strong) noexcept { return strong; }
-  
+
   // pragma MARK: std::shared_ptr<HybridFaceDetectionOutputSpec>
   /**
    * Specialized version of `std::shared_ptr<HybridFaceDetectionOutputSpec>`.
@@ -158,10 +158,10 @@ namespace margelo::nitro::facedetector::bridge::swift {
   using std__shared_ptr_HybridFaceDetectionOutputSpec_ = std::shared_ptr<HybridFaceDetectionOutputSpec>;
   std::shared_ptr<HybridFaceDetectionOutputSpec> create_std__shared_ptr_HybridFaceDetectionOutputSpec_(void* NON_NULL swiftUnsafePointer) noexcept;
   void* NON_NULL get_std__shared_ptr_HybridFaceDetectionOutputSpec_(std__shared_ptr_HybridFaceDetectionOutputSpec_ cppType);
-  
+
   // pragma MARK: std::shared_ptr<margelo::nitro::camera::HybridCameraOutputSpec>
   inline std::shared_ptr<margelo::nitro::camera::HybridCameraOutputSpec> upcast_FaceDetectionOutput_to_CameraOutput(std::shared_ptr<HybridFaceDetectionOutputSpec> child) noexcept { return child; }
-  
+
   // pragma MARK: std::weak_ptr<HybridFaceDetectionOutputSpec>
   using std__weak_ptr_HybridFaceDetectionOutputSpec_ = std::weak_ptr<HybridFaceDetectionOutputSpec>;
   inline std__weak_ptr_HybridFaceDetectionOutputSpec_ weakify_std__shared_ptr_HybridFaceDetectionOutputSpec_(const std::shared_ptr<HybridFaceDetectionOutputSpec>& strong) noexcept { return strong; }

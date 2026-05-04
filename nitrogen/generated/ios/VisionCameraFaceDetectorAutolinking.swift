@@ -19,11 +19,11 @@ public final class VisionCameraFaceDetectorAutolinking {
       return __cxxWrapped.getCxxPart()
     }()
   }
-  
+
   public static func isFaceDetectorRecyclable() -> Bool {
     return HybridFaceDetector.self is any RecyclableView.Type
   }
-  
+
   public static func createFaceDetectionOutput() -> bridge.std__shared_ptr_HybridFaceDetectionOutputSpec_ {
     let hybridObject = HybridFaceDetectionOutput()
     return { () -> bridge.std__shared_ptr_HybridFaceDetectionOutputSpec_ in
@@ -31,7 +31,7 @@ public final class VisionCameraFaceDetectorAutolinking {
       return __cxxWrapped.getCxxPart()
     }()
   }
-  
+
   public static func isFaceDetectionOutputRecyclable() -> Bool {
     return HybridFaceDetectionOutput.self is any RecyclableView.Type
   }

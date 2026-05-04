@@ -27,6 +27,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Example `test` script no longer points to an uninstalled Jest binary.
 - Example no longer passes `enableLowLightBoost={false}`, which caused CameraX to throw on devices where low-light boost is unsupported.
+- Face guide readiness now requires the full detected face bounds to fit inside the guide, preventing partial detections such as a chin at the edge from flickering into `ready`.
+- Example selfie guide tolerance is tighter, so the UI no longer marks heavily misaligned partial faces as ready.
 
 ## [2.0.0] - 2026-05-04
 

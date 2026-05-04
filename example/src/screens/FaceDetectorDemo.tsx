@@ -49,7 +49,7 @@ const FaceDetectorDemo: React.FC<FaceDetectorDemoProps> = ({ onCapture, onClose 
       centerX: guideLayout.frameLeft + guideLayout.frameSize * 0.5,
       centerY: guideLayout.frameTop + guideLayout.frameSize * 0.5,
       size: guideLayout.frameSize,
-      tolerancePx: 120
+      tolerancePx: 24
     }),
     [guideLayout.frameLeft, guideLayout.frameSize, guideLayout.frameTop]
   );

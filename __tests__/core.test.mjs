@@ -56,6 +56,32 @@ test('evaluateFaceDetection maps frame bounds into preview guide state', () => {
   assert.deepEqual(result.primaryFaceCenter, { x: 300, y: 300 });
 });
 
+test('evaluateFaceDetection rejects partial face overlap with guide', () => {
+  const config = defineFaceDetector({
+    guide: {
+      shape: 'rect',
+      units: 'px',
+      x: 200,
+      y: 200,
+      width: 200,
+      height: 200,
+      tolerancePx: 0
+    }
+  });
+  const result = evaluateFaceDetection(
+    {
+      faces: [{ bounds: { x: 150, y: 150, width: 100, height: 100 } }],
+      frame: { width: 500, height: 500 },
+      preview: { width: 1000, height: 1000 }
+    },
+    config
+  );
+
+  assert.equal(result.status, 'misaligned');
+  assert.equal(result.isInsideGuide, false);
+  assert.deepEqual(result.primaryFaceCenter, { x: 400, y: 400 });
+});
+
 test('applyGuideStability requires ready samples and reset samples', () => {
   const stability = { readySamples: 2, resetSamples: 3, minTransitionMs: 0 };
   const state = {
