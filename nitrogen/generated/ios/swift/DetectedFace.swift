@@ -18,8 +18,14 @@ public extension DetectedFace {
   /**
    * Create a new instance of `DetectedFace`.
    */
-  init(bounds: DetectedFaceBounds, trackingId: Double) {
-    self.init(bounds, trackingId)
+  init(bounds: DetectedFaceBounds, trackingId: Double?) {
+    self.init(bounds, { () -> bridge.std__optional_double_ in
+      if let __unwrappedValue = trackingId {
+        return bridge.create_std__optional_double_(__unwrappedValue)
+      } else {
+        return .init()
+      }
+    }())
   }
 
   @inline(__always)
@@ -28,7 +34,14 @@ public extension DetectedFace {
   }
   
   @inline(__always)
-  var trackingId: Double {
-    return self.__trackingId
+  var trackingId: Double? {
+    return { () -> Double? in
+      if bridge.has_value_std__optional_double_(self.__trackingId) {
+        let __unwrapped = bridge.get_std__optional_double_(self.__trackingId)
+        return __unwrapped
+      } else {
+        return nil
+      }
+    }()
   }
 }

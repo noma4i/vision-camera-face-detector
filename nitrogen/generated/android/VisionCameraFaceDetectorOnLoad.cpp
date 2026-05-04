@@ -16,6 +16,8 @@
 #include <NitroModules/HybridObjectRegistry.hpp>
 
 #include "JHybridFaceDetectorSpec.hpp"
+#include "JHybridFaceDetectionOutputSpec.hpp"
+#include "JFunc_void_FaceDetectionOutputResult.hpp"
 #include <NitroModules/DefaultConstructableObject.hpp>
 
 namespace margelo::nitro::facedetector {
@@ -34,6 +36,14 @@ struct JHybridFaceDetectorSpecImpl: public jni::JavaClass<JHybridFaceDetectorSpe
     return javaPart->getJHybridFaceDetectorSpec();
   }
 };
+struct JHybridFaceDetectionOutputSpecImpl: public jni::JavaClass<JHybridFaceDetectionOutputSpecImpl, JHybridFaceDetectionOutputSpec::JavaPart> {
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/facedetector/HybridFaceDetectionOutput;";
+  static std::shared_ptr<JHybridFaceDetectionOutputSpec> create() {
+    static const auto constructorFn = javaClassStatic()->getConstructor<JHybridFaceDetectionOutputSpecImpl::javaobject()>();
+    jni::local_ref<JHybridFaceDetectionOutputSpec::JavaPart> javaPart = javaClassStatic()->newObject(constructorFn);
+    return javaPart->getJHybridFaceDetectionOutputSpec();
+  }
+};
 
 void registerAllNatives() {
   using namespace margelo::nitro;
@@ -41,12 +51,20 @@ void registerAllNatives() {
 
   // Register native JNI methods
   margelo::nitro::facedetector::JHybridFaceDetectorSpec::CxxPart::registerNatives();
+  margelo::nitro::facedetector::JHybridFaceDetectionOutputSpec::CxxPart::registerNatives();
+  margelo::nitro::facedetector::JFunc_void_FaceDetectionOutputResult_cxx::registerNatives();
 
   // Register Nitro Hybrid Objects
   HybridObjectRegistry::registerHybridObjectConstructor(
     "FaceDetector",
     []() -> std::shared_ptr<HybridObject> {
       return JHybridFaceDetectorSpecImpl::create();
+    }
+  );
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "FaceDetectionOutput",
+    []() -> std::shared_ptr<HybridObject> {
+      return JHybridFaceDetectionOutputSpecImpl::create();
     }
   );
 }

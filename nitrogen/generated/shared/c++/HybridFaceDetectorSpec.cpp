@@ -15,7 +15,6 @@ namespace margelo::nitro::facedetector {
     // load custom methods/properties
     registerHybrids(this, [](Prototype& prototype) {
       prototype.registerHybridMethod("configure", &HybridFaceDetectorSpec::configure);
-      prototype.registerHybridMethod("detectFaces", &HybridFaceDetectorSpec::detectFaces);
     });
   }
 

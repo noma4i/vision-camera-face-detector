@@ -4,7 +4,12 @@ module.exports = {
   dependency: {
     platforms: {
       ios: {},
-      android: {},
+      android: {
+        sourceDir: './android',
+        packageImportPath:
+          'import com.margelo.nitro.facedetector.VisionCameraFaceDetectorPackage;',
+        packageInstance: 'new VisionCameraFaceDetectorPackage()',
+      },
     },
   },
 };

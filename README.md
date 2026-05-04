@@ -1,11 +1,11 @@
 # @noma4i/vision-camera-face-detector
 
-Fast, Nitro-powered face detection frame processor plugin for [VisionCamera V5](https://github.com/mrousavy/react-native-vision-camera).
+Nitro-powered face detection for VisionCamera V5 with a small declarative API.
 
-- iOS: Apple `Vision` framework (system, no extra dependency)
+- iOS: Apple `Vision` framework, no extra MLKit Pods
 - Android: `com.google.mlkit:face-detection`
-- JS: synchronous worklet contract (`scanFaces(frame) => DetectedFace[]`)
-- Zero-bridge: powered by [`react-native-nitro-modules`](https://github.com/mrousavy/nitro)
+- JS: `useFaceDetector()` creates a native CameraOutput, applies primary-face selection, and returns guide status
+- Advanced: pure helpers are exported for tests/custom UI
 
 ## Installation
 
@@ -13,27 +13,21 @@ Fast, Nitro-powered face detection frame processor plugin for [VisionCamera V5](
 yarn add @noma4i/vision-camera-face-detector react-native-vision-camera react-native-nitro-modules
 ```
 
-Vision Camera V5 requires a bare React Native project (not Expo Go). Expo prebuild works.
+Vision Camera V5 requires a bare React Native project. Expo prebuild works; Expo Go does not.
 
 ### iOS
 
-Minimum deployment target: **iOS 15.5** (matches the bundled VisionCamera/Nitro requirement).
-
-In `ios/Podfile`:
+Minimum deployment target: **iOS 15.5**.
 
 ```ruby
 platform :ios, '15.5'
 ```
 
-Then:
-
 ```bash
 cd ios && pod install
 ```
 
-iOS uses the system `Vision` framework (`VNDetectFaceRectanglesRequest`); no extra Pod dependency is downloaded.
-
-Add to `Info.plist`:
+Add camera permission text:
 
 ```xml
 <key>NSCameraUsageDescription</key>
@@ -44,61 +38,31 @@ Add to `Info.plist`:
 
 Minimum SDK: **21**.
 
-MLKit face detection AAR is resolved from `mavenCentral()` via the module's `build.gradle`. No manual wiring required.
-
-Add to `android/app/src/main/AndroidManifest.xml`:
-
 ```xml
 <uses-permission android:name="android.permission.CAMERA" />
 <uses-feature android:name="android.hardware.camera" />
 ```
 
-### Nitro codegen (one-time)
-
-After installing the package, regenerate Nitro bindings in the consumer project:
-
-```bash
-npx nitrogen generate
-```
-
-This is usually part of your CI or a local `yarn nitrogen` script.
-
 ## Usage
 
-```ts
-import { useFrameOutput, useCameraDevice, Camera } from 'react-native-vision-camera';
-import { runOnJS } from 'react-native-worklets';
-import {
-  configureFaceDetector,
-  isFaceDetectorAvailable,
-  scanFaces,
-  type DetectedFace
-} from '@noma4i/vision-camera-face-detector';
-import { useEffect, useState } from 'react';
+```tsx
+import { Camera, useCameraDevice, usePhotoOutput } from 'react-native-vision-camera';
+import { useFaceDetector } from '@noma4i/vision-camera-face-detector';
 
-export function FaceDetectorExample() {
+export function SelfieCamera() {
   const device = useCameraDevice('front');
-  const [faces, setFaces] = useState<DetectedFace[]>([]);
-
-  useEffect(() => {
-    if (!isFaceDetectorAvailable()) return;
-    configureFaceDetector({
-      performanceMode: 'accurate',
-      minFaceSize: 0.25,
-      enableTracking: true
-    });
-  }, []);
-
-  const frameOutput = useFrameOutput({
-    pixelFormat: 'yuv',
-    onFrame: (frame) => {
-      'worklet';
-      try {
-        const detected = scanFaces(frame);
-        runOnJS(setFaces)(detected);
-      } finally {
-        frame.dispose();
-      }
+  const photoOutput = usePhotoOutput({ quality: 0.9 });
+  const detector = useFaceDetector({
+    preset: 'selfie',
+    previewWidth: 390,
+    previewHeight: 844,
+    guide: {
+      shape: 'circle',
+      units: 'ratio',
+      centerX: 0.5,
+      centerY: 0.42,
+      size: 0.72,
+      tolerancePx: 120
     }
   });
 
@@ -109,83 +73,102 @@ export function FaceDetectorExample() {
       style={{ flex: 1 }}
       device={device}
       isActive
-      outputs={[frameOutput]}
+      mirrorMode="on"
+      outputs={detector.output ? [photoOutput, detector.output] : [photoOutput]}
     />
   );
 }
 ```
 
+`detector.status` is `'unavailable' | 'idle' | 'misaligned' | 'ready'`.
+`detector.result` includes all faces, the selected primary face, projected preview rects, and guide state.
+
 ## API
 
-| Export                           | Type                                              | Description                                                                                                    |
-| -------------------------------- | ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| `scanFaces(frame)`               | `(frame: Frame) => DetectedFace[]`                | Worklet-safe synchronous face scan. Returns empty array if native plugin unavailable.                          |
-| `configureFaceDetector(options)` | `(options: Partial<FaceDetectorOptions>) => void` | Apply detector options. Merges with defaults.                                                                  |
-| `isFaceDetectorAvailable()`      | `() => boolean`                                   | Guard before wiring frame output; false until native codegen + pod install complete.                           |
-| `faceDetector`                   | `FaceDetector \| undefined`                       | Raw Nitro HybridObject, resolved once at module load.                                                          |
-| `DEFAULT_FACE_DETECTOR_OPTIONS`  | `FaceDetectorOptions`                             | Sensible defaults: `fast` perf mode, no landmarks/classifications/contours, `minFaceSize: 0.15`, tracking off. |
+### `useFaceDetector(config)`
 
-### `FaceDetectorOptions`
+Main API for apps. It creates a VisionCamera native `CameraOutput`, throttles scanning in native code, applies native options, and returns guide status.
 
-| Field                | Type                   | Default  | Notes                                                                         |
-| -------------------- | ---------------------- | -------- | ----------------------------------------------------------------------------- |
-| `performanceMode`    | `'fast' \| 'accurate'` | `'fast'` | Android: MLKit `FaceDetectorMode`. iOS: ignored (Vision uses fixed pipeline). |
-| `landmarkMode`       | `'none' \| 'all'`      | `'none'` | Android: MLKit `FaceLandmarkMode`. iOS: not exposed.                          |
-| `classificationMode` | `'none' \| 'all'`      | `'none'` | Android: MLKit `FaceClassificationMode`. iOS: not exposed.                    |
-| `contourMode`        | `'none' \| 'all'`      | `'none'` | Android: MLKit `FaceContourMode`. iOS: not exposed.                           |
-| `minFaceSize`        | `number` (0-1)         | `0.15`   | Android: fraction of frame width. iOS: ignored.                               |
-| `enableTracking`     | `boolean`              | `false`  | Android: MLKit face tracking. iOS: always returns `trackingId: 0`.            |
+Required fields:
+
+| Field | Type | Notes |
+| --- | --- | --- |
+| `previewWidth` | `number` | Preview/UI width in pixels. |
+| `previewHeight` | `number` | Preview/UI height in pixels. |
+
+Optional fields:
+
+| Field | Type | Default |
+| --- | --- | --- |
+| `preset` | `'selfie' \| 'fast' \| 'accurate'` | `'fast'` |
+| `fps` | `number` | preset-specific, clamped to 1-60 |
+| `guide` | circle or rect config | selfie preset gets a default circular guide |
+| `android` | Android MLKit options | preset-specific |
+| `stability` | `{ readySamples; resetSamples; minTransitionMs }` | `{ 2, 4, 400 }` |
+
+Return:
+
+| Field | Type |
+| --- | --- |
+| `output` | VisionCamera frame output or `undefined` |
+| `status` | `'unavailable' \| 'idle' \| 'misaligned' \| 'ready'` |
+| `result` | `FaceDetectionResult` |
+| `isAvailable` | `boolean` |
+| `isReady` | `boolean` |
+
+### `defineFaceDetector(config)`
+
+Pure helper that normalizes the declarative config into runtime values. Useful for tests or custom integrations.
+
+### Pure helpers
+
+`evaluateFaceDetection`, `pickPrimaryFace`, `mapFrameRectToPreview`, `resolveGuideRect`, and `applyGuideStability` are exported for custom UI and unit tests.
 
 ### `DetectedFace`
 
 ```ts
 interface DetectedFace {
-  bounds: DetectedFaceBounds;
+  bounds: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
   trackingId?: number;
-}
-
-interface DetectedFaceBounds {
-  x: number; // pixels, frame-space
-  y: number;
-  width: number;
-  height: number;
 }
 ```
 
-Bounds are in **frame pixel coordinates**, not screen coordinates. Project to screen space using Vision Camera's preview transform (see `example/src/utils/selfieGuideDetection.ts` for a reference implementation covering both iOS and Android axis-swap cases).
+`trackingId` is Android-only. iOS returns face rectangles from Apple Vision and does not synthesize fake tracking ids.
+
+## Nitro codegen
+
+The package ships generated bindings. If you edit `src/specs/FaceDetector.nitro.ts`, regenerate:
+
+```bash
+npm run nitrogen
+```
 
 ## Example
 
-A complete working example is in [`example/`](./example). It demonstrates:
-
-- Selfie camera with front-facing device
-- Face-framing guide overlay (outer dashed border + square + circle)
-- Live `idle` -> `misaligned` -> `ready` guide status
-- Haptic feedback on `ready`
-- Photo capture through `usePhotoOutput`
-
-Run it:
+A complete working example is in [`example/`](./example).
 
 ```bash
 cd example
 yarn install
-cd ios && pod install && cd ..
-yarn ios   # or: yarn android
+cd ios && bundle exec pod install && cd ..
+yarn ios
 ```
 
 ## Troubleshooting
 
-**`isFaceDetectorAvailable()` returns `false`**
-Native module not linked. Run `npx nitrogen generate`, then `pod install` on iOS / gradle sync on Android, and rebuild.
+**`output` is `undefined` or `status` is `unavailable`**
+Native module is not linked. Run `npm run nitrogen`, then `pod install` on iOS or Gradle sync on Android, and rebuild.
 
-**Crash on frame processor**
-Call `frame.dispose()` **after** `scanFaces(frame)`, in a `finally` block. Nitro does not auto-dispose frames.
+**Bounds do not line up with the preview**
+Pass the actual preview dimensions to `previewWidth` and `previewHeight`; the hook projects frame-space bounds into preview-space using center-crop scaling.
 
-**Bounds look rotated on Android**
-Android preview orientation differs from frame orientation in portrait mode. Use the axis-swap logic from `example/src/utils/selfieGuideDetection.ts:getProjectionFrameSize`.
-
-**iOS detection lacks landmarks/tracking**
-iOS uses Apple's `Vision` framework (`VNDetectFaceRectanglesRequest`), which only returns face rectangles. `landmarkMode`, `classificationMode`, `contourMode`, `enableTracking`, and `minFaceSize` are no-ops on iOS; on Android they map to the corresponding MLKit options.
+**Android logs `Low-light boost is not supported`**
+Do not pass `enableLowLightBoost={false}`. VisionCamera V5 calls CameraX whenever the prop is set; only pass it when `device.supportsLowLightBoost` is true.
 
 ## License
 

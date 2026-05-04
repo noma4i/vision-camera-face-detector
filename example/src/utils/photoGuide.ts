@@ -1,5 +1,12 @@
 import { Dimensions } from 'react-native';
-import type { NormalizedFaceRect, PhotoGuideLayout } from '../types';
+import type { PhotoGuideLayout } from '../types';
+
+interface PhotoGuideDetectionBounds {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -41,7 +48,7 @@ export const getPhotoGuideLayout = (
 export const getPhotoGuideDetectionBounds = (
   screenWidth: number = SCREEN_WIDTH,
   screenHeight: number = SCREEN_HEIGHT
-): NormalizedFaceRect => {
+): PhotoGuideDetectionBounds => {
   const layout = getPhotoGuideLayout(screenWidth, screenHeight);
   const relax = PHOTO_GUIDE_DIMENSIONS.DETECTION_RELAX_OFFSET;
   const detectionSize = layout.centerSquareFrameSize + 2 * relax;

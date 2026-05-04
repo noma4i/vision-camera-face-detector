@@ -1,0 +1,1 @@
+/Users/noma4i/work/vision-camera-face-detector/example/node_modules/@noma4i/vision-camera-face-detector/android/build/intermediates/cxx/Debug/6i6t636r/obj/armeabi-v7a

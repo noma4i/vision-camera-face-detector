@@ -5,7 +5,6 @@
 /// Copyright © Marc Rousavy @ Margelo
 ///
 
-import VisionCamera
 import NitroModules
 
 /// See ``HybridFaceDetectorSpec``
@@ -15,7 +14,6 @@ public protocol HybridFaceDetectorSpec_protocol: HybridObject {
 
   // Methods
   func configure(options: FaceDetectorOptions) throws -> Void
-  func detectFaces(frame: (any HybridFrameSpec)) throws -> [DetectedFace]
 }
 
 public extension HybridFaceDetectorSpec_protocol {

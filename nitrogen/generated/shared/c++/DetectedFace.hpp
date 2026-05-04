@@ -32,6 +32,7 @@
 namespace margelo::nitro::facedetector { struct DetectedFaceBounds; }
 
 #include "DetectedFaceBounds.hpp"
+#include <optional>
 
 namespace margelo::nitro::facedetector {
 
@@ -41,11 +42,11 @@ namespace margelo::nitro::facedetector {
   struct DetectedFace final {
   public:
     DetectedFaceBounds bounds     SWIFT_PRIVATE;
-    double trackingId     SWIFT_PRIVATE;
+    std::optional<double> trackingId     SWIFT_PRIVATE;
 
   public:
     DetectedFace() = default;
-    explicit DetectedFace(DetectedFaceBounds bounds, double trackingId): bounds(bounds), trackingId(trackingId) {}
+    explicit DetectedFace(DetectedFaceBounds bounds, std::optional<double> trackingId): bounds(bounds), trackingId(trackingId) {}
 
   public:
     friend bool operator==(const DetectedFace& lhs, const DetectedFace& rhs) = default;
@@ -62,13 +63,13 @@ namespace margelo::nitro {
       jsi::Object obj = arg.asObject(runtime);
       return margelo::nitro::facedetector::DetectedFace(
         JSIConverter<margelo::nitro::facedetector::DetectedFaceBounds>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "bounds"))),
-        JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "trackingId")))
+        JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "trackingId")))
       );
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::facedetector::DetectedFace& arg) {
       jsi::Object obj(runtime);
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "bounds"), JSIConverter<margelo::nitro::facedetector::DetectedFaceBounds>::toJSI(runtime, arg.bounds));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "trackingId"), JSIConverter<double>::toJSI(runtime, arg.trackingId));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "trackingId"), JSIConverter<std::optional<double>>::toJSI(runtime, arg.trackingId));
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -80,7 +81,7 @@ namespace margelo::nitro {
         return false;
       }
       if (!JSIConverter<margelo::nitro::facedetector::DetectedFaceBounds>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "bounds")))) return false;
-      if (!JSIConverter<double>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "trackingId")))) return false;
+      if (!JSIConverter<std::optional<double>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "trackingId")))) return false;
       return true;
     }
   };

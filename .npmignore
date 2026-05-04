@@ -12,3 +12,8 @@ tsconfig.build.json
 .editorconfig
 .yarn/
 .pnp.*
+CLAUDE.md
+src/CLAUDE.md
+ios/CLAUDE.md
+android/CLAUDE.md
+android/src/CLAUDE.md

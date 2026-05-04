@@ -12,8 +12,8 @@ import {
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Camera, useCameraDevice, usePhotoOutput } from 'react-native-vision-camera';
+import { useFaceDetector } from '@noma4i/vision-camera-face-detector';
 import OverlayButton from '../components/OverlayButton';
-import { useSelfieFaceGuide } from '../hooks/useSelfieFaceGuide';
 import { COLORS, THEME } from '../theme';
 import { logger } from '../utils/logger';
 import { getPhotoGuideLayout } from '../utils/photoGuide';
@@ -41,9 +41,23 @@ const FaceDetectorDemo: React.FC<FaceDetectorDemoProps> = ({ onCapture, onClose 
   const photoOutput = usePhotoOutput(SELFIE_PHOTO_OUTPUT_OPTIONS);
   const insets = useSafeAreaInsets();
   const guideLayout = useMemo(() => getPhotoGuideLayout(SCREEN_WIDTH, SCREEN_HEIGHT), []);
-  const { guideStatus, frameOutput } = useSelfieFaceGuide({
-    screenWidth: SCREEN_WIDTH,
-    screenHeight: SCREEN_HEIGHT
+  const closeButtonStyle = useMemo(() => [styles.closeButton, { top: 16 + insets.top }], [insets.top]);
+  const guide = useMemo(
+    () => ({
+      shape: 'circle' as const,
+      units: 'px' as const,
+      centerX: guideLayout.frameLeft + guideLayout.frameSize * 0.5,
+      centerY: guideLayout.frameTop + guideLayout.frameSize * 0.5,
+      size: guideLayout.frameSize,
+      tolerancePx: 120
+    }),
+    [guideLayout.frameLeft, guideLayout.frameSize, guideLayout.frameTop]
+  );
+  const { status: guideStatus, output: detectorOutput } = useFaceDetector({
+    preset: 'selfie',
+    previewWidth: SCREEN_WIDTH,
+    previewHeight: SCREEN_HEIGHT,
+    guide
   });
   const [appState, setAppState] = useState<AppStateStatus>(AppState.currentState);
   const [isCapturing, setIsCapturing] = useState(false);
@@ -54,8 +68,8 @@ const FaceDetectorDemo: React.FC<FaceDetectorDemoProps> = ({ onCapture, onClose 
   const isCaptureDisabled = !isCameraStarted || isCapturing || isCaptureHandoffInFlight;
 
   const outputs = useMemo(
-    () => (frameOutput ? [photoOutput, frameOutput] : [photoOutput]),
-    [photoOutput, frameOutput]
+    () => (detectorOutput ? [photoOutput, detectorOutput] : [photoOutput]),
+    [photoOutput, detectorOutput]
   );
 
   useEffect(() => {
@@ -128,7 +142,7 @@ const FaceDetectorDemo: React.FC<FaceDetectorDemoProps> = ({ onCapture, onClose 
           constraints={SELFIE_CAMERA_CONSTRAINTS}
           outputs={outputs}
           isActive={isActive}
-          enableLowLightBoost={false}
+          mirrorMode="on"
           onStarted={handleCameraStarted}
           onError={handleCameraError}
         />
@@ -151,7 +165,7 @@ const FaceDetectorDemo: React.FC<FaceDetectorDemoProps> = ({ onCapture, onClose 
         />
 
         <OverlayButton
-          buttonStyle={{ left: 16, top: 16 + insets.top }}
+          buttonStyle={closeButtonStyle}
           onPress={onClose}
           accessibilityLabel="Close"
         >
@@ -287,6 +301,9 @@ const styles = StyleSheet.create({
     fontSize: 28,
     lineHeight: 28,
     fontWeight: '300'
+  },
+  closeButton: {
+    left: 16
   },
   captureButton: {
     width: 84,

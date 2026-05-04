@@ -7,6 +7,7 @@ Bare React Native app demonstrating [`@noma4i/vision-camera-face-detector`](../)
 - Front camera preview (VisionCamera V5, Nitro outputs API).
 - Face framing guide overlay: outer dashed border, square dashed outline, circular guide ring.
 - Live status: `idle` (no face) -> `misaligned` (face outside guide) -> `ready` (face centered).
+- Package-level `useFaceDetector()` hook provides a native CameraOutput, throttling, and guide evaluation.
 - Haptic feedback when entering `ready` state.
 - Photo capture via `usePhotoOutput`; captured photo shown on the next screen.
 
@@ -33,7 +34,7 @@ The example imports the library via `"@noma4i/vision-camera-face-detector": "fil
 ```bash
 cd example/ios
 bundle install                  # one-time
-bundle exec pod install         # pulls GoogleMLKit/FaceDetection (~120 MB first run)
+bundle exec pod install         # iOS uses Apple Vision, no MLKit Pod download
 cd ..
 yarn ios                        # or: yarn ios --device
 ```
@@ -46,6 +47,15 @@ yarn android                    # or: yarn android --active-arch-only
 ```
 
 MLKit face detection AAR is pulled automatically from mavenCentral.
+
+For USB devices, start Metro separately and avoid the macOS packager launcher:
+
+```bash
+cd example
+yarn start --host 0.0.0.0
+adb reverse tcp:8081 tcp:8081
+npx react-native run-android --device <device-id> --no-packager
+```
 
 ## Regenerate Nitro bindings
 
@@ -60,8 +70,8 @@ Then rebuild the example (`pod install` on iOS, gradle sync on Android).
 
 ## Troubleshooting
 
-**iOS build fails with `GoogleMLKit/FaceDetection` pod not found**
-Ensure `platform :ios, '15.5'` in `ios/Podfile` and re-run `bundle exec pod install`.
+**iOS build fails after changing native specs**
+Ensure `platform :ios, '15.5'` in `ios/Podfile`, run `yarn nitrogen` from the library root, then re-run `bundle exec pod install`.
 
 **Android build fails with duplicate `libreactnative.so`**
 The library's `android/build.gradle` excludes shared JNI libs (`libjsi`, `libreactnative`, `libfbjni`, `libc++_shared`, `libNitroModules`). If you run into duplicates, run `cd android && ./gradlew clean` and rebuild.

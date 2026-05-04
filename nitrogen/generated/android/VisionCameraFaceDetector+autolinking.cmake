@@ -34,8 +34,10 @@ target_sources(
   ../nitrogen/generated/android/VisionCameraFaceDetectorOnLoad.cpp
   # Shared Nitrogen C++ sources
   ../nitrogen/generated/shared/c++/HybridFaceDetectorSpec.cpp
+  ../nitrogen/generated/shared/c++/HybridFaceDetectionOutputSpec.cpp
   # Android-specific Nitrogen C++ sources
   ../nitrogen/generated/android/c++/JHybridFaceDetectorSpec.cpp
+  ../nitrogen/generated/android/c++/JHybridFaceDetectionOutputSpec.cpp
 )
 
 # From node_modules/react-native/ReactAndroid/cmake-utils/folly-flags.cmake

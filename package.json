@@ -1,7 +1,7 @@
 {
   "name": "@noma4i/vision-camera-face-detector",
-  "version": "2.0.0",
-  "description": "Face detection frame processor plugin for VisionCamera V5 (Nitro). iOS: Apple Vision, Android: MLKit.",
+  "version": "3.0.0",
+  "description": "Face detection CameraOutput for VisionCamera V5 (Nitro). iOS: Apple Vision, Android: MLKit.",
   "source": "src/index",
   "main": "lib/index",
   "module": "lib/index",
@@ -23,10 +23,11 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "nitrogen": "nitrogen generate",
+    "nitrogen": "nitrogen src",
     "build": "tsc -p tsconfig.build.json",
     "clean": "rm -rf lib",
     "typecheck": "tsc --noEmit",
+    "test": "npm run build && node --test __tests__/*.test.mjs",
     "prepare": "tsc -p tsconfig.build.json"
   },
   "keywords": [
@@ -35,7 +36,7 @@
     "face-detection",
     "mlkit",
     "nitro",
-    "frame-processor"
+    "camera-output"
   ],
   "repository": {
     "type": "git",

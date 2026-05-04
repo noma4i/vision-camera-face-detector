@@ -8,10 +8,18 @@
 #pragma once
 
 // Forward declarations of C++ defined types
+// Forward declaration of `CameraOrientation` to properly resolve imports.
+namespace margelo::nitro::facedetector { enum class CameraOrientation; }
 // Forward declaration of `DetectedFaceBounds` to properly resolve imports.
 namespace margelo::nitro::facedetector { struct DetectedFaceBounds; }
 // Forward declaration of `DetectedFace` to properly resolve imports.
 namespace margelo::nitro::facedetector { struct DetectedFace; }
+// Forward declaration of `FaceDetectionFrame` to properly resolve imports.
+namespace margelo::nitro::facedetector { struct FaceDetectionFrame; }
+// Forward declaration of `FaceDetectionOrientation` to properly resolve imports.
+namespace margelo::nitro::facedetector { enum class FaceDetectionOrientation; }
+// Forward declaration of `FaceDetectionOutputResult` to properly resolve imports.
+namespace margelo::nitro::facedetector { struct FaceDetectionOutputResult; }
 // Forward declaration of `FaceDetectorClassificationMode` to properly resolve imports.
 namespace margelo::nitro::facedetector { enum class FaceDetectorClassificationMode; }
 // Forward declaration of `FaceDetectorContourMode` to properly resolve imports.
@@ -22,24 +30,36 @@ namespace margelo::nitro::facedetector { enum class FaceDetectorLandmarkMode; }
 namespace margelo::nitro::facedetector { struct FaceDetectorOptions; }
 // Forward declaration of `FaceDetectorPerformanceMode` to properly resolve imports.
 namespace margelo::nitro::facedetector { enum class FaceDetectorPerformanceMode; }
+// Forward declaration of `HybridCameraOutputSpec` to properly resolve imports.
+namespace margelo::nitro::camera { class HybridCameraOutputSpec; }
+// Forward declaration of `HybridFaceDetectionOutputSpec` to properly resolve imports.
+namespace margelo::nitro::facedetector { class HybridFaceDetectionOutputSpec; }
 // Forward declaration of `HybridFaceDetectorSpec` to properly resolve imports.
 namespace margelo::nitro::facedetector { class HybridFaceDetectorSpec; }
-// Forward declaration of `HybridFrameSpec` to properly resolve imports.
-namespace margelo::nitro::camera { class HybridFrameSpec; }
+// Forward declaration of `MediaType` to properly resolve imports.
+namespace margelo::nitro::facedetector { enum class MediaType; }
 
 // Include C++ defined types
+#include "CameraOrientation.hpp"
 #include "DetectedFace.hpp"
 #include "DetectedFaceBounds.hpp"
+#include "FaceDetectionFrame.hpp"
+#include "FaceDetectionOrientation.hpp"
+#include "FaceDetectionOutputResult.hpp"
 #include "FaceDetectorClassificationMode.hpp"
 #include "FaceDetectorContourMode.hpp"
 #include "FaceDetectorLandmarkMode.hpp"
 #include "FaceDetectorOptions.hpp"
 #include "FaceDetectorPerformanceMode.hpp"
+#include "HybridFaceDetectionOutputSpec.hpp"
 #include "HybridFaceDetectorSpec.hpp"
+#include "MediaType.hpp"
 #include <NitroModules/Result.hpp>
-#include <VisionCamera/HybridFrameSpec.hpp>
+#include <VisionCamera/HybridCameraOutputSpec.hpp>
 #include <exception>
+#include <functional>
 #include <memory>
+#include <optional>
 #include <vector>
 
 // C++ helpers for Swift
@@ -52,10 +72,12 @@ namespace margelo::nitro::camera { class HybridFrameSpec; }
 #include <NitroModules/DateToChronoDate.hpp>
 
 // Forward declarations of Swift defined types
+// Forward declaration of `HybridCameraOutputSpec_cxx` to properly resolve imports.
+namespace VisionCamera { class HybridCameraOutputSpec_cxx; }
+// Forward declaration of `HybridFaceDetectionOutputSpec_cxx` to properly resolve imports.
+namespace VisionCameraFaceDetector { class HybridFaceDetectionOutputSpec_cxx; }
 // Forward declaration of `HybridFaceDetectorSpec_cxx` to properly resolve imports.
 namespace VisionCameraFaceDetector { class HybridFaceDetectorSpec_cxx; }
-// Forward declaration of `HybridFrameSpec_cxx` to properly resolve imports.
-namespace VisionCamera { class HybridFrameSpec_cxx; }
 
 // Include Swift defined types
 #if __has_include("VisionCameraFaceDetector-Swift.h")

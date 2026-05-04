@@ -7,10 +7,6 @@
 
 #include "JHybridFaceDetectorSpec.hpp"
 
-// Forward declaration of `DetectedFace` to properly resolve imports.
-namespace margelo::nitro::facedetector { struct DetectedFace; }
-// Forward declaration of `DetectedFaceBounds` to properly resolve imports.
-namespace margelo::nitro::facedetector { struct DetectedFaceBounds; }
 // Forward declaration of `FaceDetectorOptions` to properly resolve imports.
 namespace margelo::nitro::facedetector { struct FaceDetectorOptions; }
 // Forward declaration of `FaceDetectorPerformanceMode` to properly resolve imports.
@@ -21,14 +17,7 @@ namespace margelo::nitro::facedetector { enum class FaceDetectorLandmarkMode; }
 namespace margelo::nitro::facedetector { enum class FaceDetectorClassificationMode; }
 // Forward declaration of `FaceDetectorContourMode` to properly resolve imports.
 namespace margelo::nitro::facedetector { enum class FaceDetectorContourMode; }
-// Forward declaration of `HybridFrameSpec` to properly resolve imports.
-namespace margelo::nitro::camera { class HybridFrameSpec; }
 
-#include "DetectedFace.hpp"
-#include <vector>
-#include "JDetectedFace.hpp"
-#include "DetectedFaceBounds.hpp"
-#include "JDetectedFaceBounds.hpp"
 #include "FaceDetectorOptions.hpp"
 #include "JFaceDetectorOptions.hpp"
 #include "FaceDetectorPerformanceMode.hpp"
@@ -39,9 +28,6 @@ namespace margelo::nitro::camera { class HybridFrameSpec; }
 #include "JFaceDetectorClassificationMode.hpp"
 #include "FaceDetectorContourMode.hpp"
 #include "JFaceDetectorContourMode.hpp"
-#include <memory>
-#include <VisionCamera/HybridFrameSpec.hpp>
-#include <VisionCamera/JHybridFrameSpec.hpp>
 
 namespace margelo::nitro::facedetector {
 
@@ -79,20 +65,6 @@ namespace margelo::nitro::facedetector {
   void JHybridFaceDetectorSpec::configure(const FaceDetectorOptions& options) {
     static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<JFaceDetectorOptions> /* options */)>("configure");
     method(_javaPart, JFaceDetectorOptions::fromCpp(options));
-  }
-  std::vector<DetectedFace> JHybridFaceDetectorSpec::detectFaces(const std::shared_ptr<margelo::nitro::camera::HybridFrameSpec>& frame) {
-    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<jni::JArrayClass<JDetectedFace>>(jni::alias_ref<margelo::nitro::camera::JHybridFrameSpec::JavaPart> /* frame */)>("detectFaces");
-    auto __result = method(_javaPart, std::dynamic_pointer_cast<margelo::nitro::camera::JHybridFrameSpec>(frame)->getJavaPart());
-    return [&]() {
-      size_t __size = __result->size();
-      std::vector<DetectedFace> __vector;
-      __vector.reserve(__size);
-      for (size_t __i = 0; __i < __size; __i++) {
-        auto __element = __result->getElement(__i);
-        __vector.push_back(__element->toCpp());
-      }
-      return __vector;
-    }();
   }
 
 } // namespace margelo::nitro::facedetector

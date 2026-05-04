@@ -22,23 +22,12 @@ namespace margelo::nitro::facedetector { enum class FaceDetectorLandmarkMode; }
 namespace margelo::nitro::facedetector { enum class FaceDetectorClassificationMode; }
 // Forward declaration of `FaceDetectorContourMode` to properly resolve imports.
 namespace margelo::nitro::facedetector { enum class FaceDetectorContourMode; }
-// Forward declaration of `DetectedFace` to properly resolve imports.
-namespace margelo::nitro::facedetector { struct DetectedFace; }
-// Forward declaration of `DetectedFaceBounds` to properly resolve imports.
-namespace margelo::nitro::facedetector { struct DetectedFaceBounds; }
-// Forward declaration of `HybridFrameSpec` to properly resolve imports.
-namespace margelo::nitro::camera { class HybridFrameSpec; }
 
 #include "FaceDetectorOptions.hpp"
 #include "FaceDetectorPerformanceMode.hpp"
 #include "FaceDetectorLandmarkMode.hpp"
 #include "FaceDetectorClassificationMode.hpp"
 #include "FaceDetectorContourMode.hpp"
-#include "DetectedFace.hpp"
-#include <vector>
-#include "DetectedFaceBounds.hpp"
-#include <memory>
-#include <VisionCamera/HybridFrameSpec.hpp>
 
 #include "VisionCameraFaceDetector-Swift-Cxx-Umbrella.hpp"
 
@@ -95,14 +84,6 @@ namespace margelo::nitro::facedetector {
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
-    }
-    inline std::vector<DetectedFace> detectFaces(const std::shared_ptr<margelo::nitro::camera::HybridFrameSpec>& frame) override {
-      auto __result = _swiftPart.detectFaces(frame);
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
     }
 
   private:

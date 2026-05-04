@@ -1,0 +1,7 @@
+/Users/noma4i/work/vision-camera-face-detector/example/node_modules/@noma4i/vision-camera-face-detector/android/.cxx/Debug/6i6t636r/prefab/x86/prefab/lib/i686-linux-android/cmake/ReactAndroid/ReactAndroidConfig.cmake
+/Users/noma4i/work/vision-camera-face-detector/example/node_modules/@noma4i/vision-camera-face-detector/android/.cxx/Debug/6i6t636r/prefab/x86/prefab/lib/i686-linux-android/cmake/ReactAndroid/ReactAndroidConfigVersion.cmake
+/Users/noma4i/work/vision-camera-face-detector/example/node_modules/@noma4i/vision-camera-face-detector/android/.cxx/Debug/6i6t636r/prefab/x86/prefab/lib/i686-linux-android/cmake/fbjni/fbjniConfig.cmake
+/Users/noma4i/work/vision-camera-face-detector/example/node_modules/@noma4i/vision-camera-face-detector/android/.cxx/Debug/6i6t636r/prefab/x86/prefab/lib/i686-linux-android/cmake/fbjni/fbjniConfigVersion.cmake
+/Users/noma4i/work/vision-camera-face-detector/example/node_modules/@noma4i/vision-camera-face-detector/android/.cxx/Debug/6i6t636r/prefab/x86/prefab/lib/i686-linux-android/cmake/react-native-nitro-modules/react-native-nitro-modulesConfig.cmake
+/Users/noma4i/work/vision-camera-face-detector/example/node_modules/@noma4i/vision-camera-face-detector/android/.cxx/Debug/6i6t636r/prefab/x86/prefab/lib/i686-linux-android/cmake/react-native-vision-camera/react-native-vision-cameraConfig.cmake
+/Users/noma4i/work/vision-camera-face-detector/example/node_modules/@noma4i/vision-camera-face-detector/android/CMakeLists.txt

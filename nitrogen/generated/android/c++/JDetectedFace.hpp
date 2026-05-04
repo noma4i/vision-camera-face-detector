@@ -12,6 +12,7 @@
 
 #include "DetectedFaceBounds.hpp"
 #include "JDetectedFaceBounds.hpp"
+#include <optional>
 
 namespace margelo::nitro::facedetector {
 
@@ -34,11 +35,11 @@ namespace margelo::nitro::facedetector {
       static const auto clazz = javaClassStatic();
       static const auto fieldBounds = clazz->getField<JDetectedFaceBounds>("bounds");
       jni::local_ref<JDetectedFaceBounds> bounds = this->getFieldValue(fieldBounds);
-      static const auto fieldTrackingId = clazz->getField<double>("trackingId");
-      double trackingId = this->getFieldValue(fieldTrackingId);
+      static const auto fieldTrackingId = clazz->getField<jni::JDouble>("trackingId");
+      jni::local_ref<jni::JDouble> trackingId = this->getFieldValue(fieldTrackingId);
       return DetectedFace(
         bounds->toCpp(),
-        trackingId
+        trackingId != nullptr ? std::make_optional(trackingId->value()) : std::nullopt
       );
     }
 
@@ -48,13 +49,13 @@ namespace margelo::nitro::facedetector {
      */
     [[maybe_unused]]
     static jni::local_ref<JDetectedFace::javaobject> fromCpp(const DetectedFace& value) {
-      using JSignature = JDetectedFace(jni::alias_ref<JDetectedFaceBounds>, double);
+      using JSignature = JDetectedFace(jni::alias_ref<JDetectedFaceBounds>, jni::alias_ref<jni::JDouble>);
       static const auto clazz = javaClassStatic();
       static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
       return create(
         clazz,
         JDetectedFaceBounds::fromCpp(value.bounds),
-        value.trackingId
+        value.trackingId.has_value() ? jni::JDouble::valueOf(value.trackingId.value()) : nullptr
       );
     }
   };

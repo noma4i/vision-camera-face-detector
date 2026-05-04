@@ -1,10 +1,10 @@
 import React, { memo, useCallback } from 'react';
-import type { PressableProps, ViewStyle } from 'react-native';
+import type { PressableProps, StyleProp, ViewStyle } from 'react-native';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { COLORS } from '../theme';
 
 export interface OverlayButtonProps extends Omit<PressableProps, 'style'> {
-  buttonStyle?: ViewStyle;
+  buttonStyle?: StyleProp<ViewStyle>;
   children: React.ReactNode;
 }
 

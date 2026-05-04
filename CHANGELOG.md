@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.0] - 2026-05-04
+
+### Added
+- **BREAKING:** New declarative `useFaceDetector(config)` API for VisionCamera native outputs, native frame throttling, primary-face selection, guide evaluation, and stable status.
+- **BREAKING:** New Nitro `FaceDetectionOutput` extends VisionCamera V5 `CameraOutput`, so face detection runs in native code without JS frame processors.
+- `defineFaceDetector(config)` and pure helpers for config normalization, guide projection, primary-face selection, and status stability.
+- Unit tests for the new pure DSL/DX layer.
+
+### Changed
+- **BREAKING:** Removed the old public `scanFaces`, `configureFaceDetector`, `faceDetector`, and `DEFAULT_FACE_DETECTOR_OPTIONS` API surface.
+- **BREAKING:** `trackingId` is now optional. Android returns MLKit tracking ids when available; iOS returns no tracking id.
+- Android detector configuration now avoids no-op rebuilds, closes replaced MLKit clients, and uses a bounded detection wait.
+- Android now includes an autolink package bootstrap so `VisionCameraFaceDetectorOnLoad` is loaded into the APK.
+- Nitro generation script now points at `src` specs.
+- Example app now consumes the package-level `useFaceDetector()` native output instead of carrying local frame-processor guide logic.
+
+### Removed
+- Worklets runtime dependency. `react-native-vision-camera-worklets` and `react-native-worklets` are no longer required.
+
+### Fixed
+- Example `test` script no longer points to an uninstalled Jest binary.
+- Example no longer passes `enableLowLightBoost={false}`, which caused CameraX to throw on devices where low-light boost is unsupported.
+
 ## [2.0.0] - 2026-05-04
 
 ### Changed

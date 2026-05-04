@@ -11,6 +11,7 @@
 #import <type_traits>
 
 #include "HybridFaceDetectorSpecSwift.hpp"
+#include "HybridFaceDetectionOutputSpecSwift.hpp"
 
 @interface VisionCameraFaceDetectorAutolinking : NSObject
 @end
@@ -25,6 +26,13 @@
     "FaceDetector",
     []() -> std::shared_ptr<HybridObject> {
       std::shared_ptr<HybridFaceDetectorSpec> hybridObject = VisionCameraFaceDetector::VisionCameraFaceDetectorAutolinking::createFaceDetector();
+      return hybridObject;
+    }
+  );
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "FaceDetectionOutput",
+    []() -> std::shared_ptr<HybridObject> {
+      std::shared_ptr<HybridFaceDetectionOutputSpec> hybridObject = VisionCameraFaceDetector::VisionCameraFaceDetectorAutolinking::createFaceDetectionOutput();
       return hybridObject;
     }
   );

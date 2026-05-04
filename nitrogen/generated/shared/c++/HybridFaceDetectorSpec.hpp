@@ -15,16 +15,8 @@
 
 // Forward declaration of `FaceDetectorOptions` to properly resolve imports.
 namespace margelo::nitro::facedetector { struct FaceDetectorOptions; }
-// Forward declaration of `DetectedFace` to properly resolve imports.
-namespace margelo::nitro::facedetector { struct DetectedFace; }
-// Forward declaration of `HybridFrameSpec` to properly resolve imports.
-namespace margelo::nitro::camera { class HybridFrameSpec; }
 
 #include "FaceDetectorOptions.hpp"
-#include "DetectedFace.hpp"
-#include <vector>
-#include <memory>
-#include <VisionCamera/HybridFrameSpec.hpp>
 
 namespace margelo::nitro::facedetector {
 
@@ -58,7 +50,6 @@ namespace margelo::nitro::facedetector {
     public:
       // Methods
       virtual void configure(const FaceDetectorOptions& options) = 0;
-      virtual std::vector<DetectedFace> detectFaces(const std::shared_ptr<margelo::nitro::camera::HybridFrameSpec>& frame) = 0;
 
     protected:
       // Hybrid Setup

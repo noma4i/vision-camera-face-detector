@@ -22,7 +22,7 @@ data class DetectedFace(
   val bounds: DetectedFaceBounds,
   @DoNotStrip
   @Keep
-  val trackingId: Double
+  val trackingId: Double?
 ) {
   /* primary constructor */
 
@@ -34,7 +34,7 @@ data class DetectedFace(
     @Keep
     @Suppress("unused")
     @JvmStatic
-    private fun fromCpp(bounds: DetectedFaceBounds, trackingId: Double): DetectedFace {
+    private fun fromCpp(bounds: DetectedFaceBounds, trackingId: Double?): DetectedFace {
       return DetectedFace(bounds, trackingId)
     }
   }

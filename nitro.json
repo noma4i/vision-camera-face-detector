@@ -17,6 +17,16 @@
         "language": "kotlin",
         "implementationClassName": "HybridFaceDetector"
       }
+    },
+    "FaceDetectionOutput": {
+      "ios": {
+        "language": "swift",
+        "implementationClassName": "HybridFaceDetectionOutput"
+      },
+      "android": {
+        "language": "kotlin",
+        "implementationClassName": "HybridFaceDetectionOutput"
+      }
     }
   },
   "ignorePaths": ["node_modules"]

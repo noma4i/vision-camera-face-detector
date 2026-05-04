@@ -7,19 +7,18 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest",
+    "test": "npm run typecheck",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@noma4i/vision-camera-face-detector": "file:..",
     "react": "19.2.3",
     "react-native": "0.85.1",
     "react-native-haptic-feedback": "^3.0.0",
     "react-native-nitro-image": "^0.13.1",
     "react-native-nitro-modules": "^0.35.4",
     "react-native-safe-area-context": "^5.5.2",
-    "react-native-vision-camera": "5.0.4",
-    "react-native-worklets": "^0.8.1",
-    "@noma4i/vision-camera-face-detector": "file:.."
+    "react-native-vision-camera": "5.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
