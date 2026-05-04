@@ -67,3 +67,4 @@ example/.xcode.env.local
 CLAUDE.md
 .claude/
 .plans/
+/android/.cxx

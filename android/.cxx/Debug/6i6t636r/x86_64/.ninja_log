@@ -1,8 +1,0 @@
-# ninja log v5
-0	924	1777896087119818861	CMakeFiles/VisionCameraFaceDetector.dir/Users/noma4i/work/vision-camera-face-detector/example/node_modules/@noma4i/vision-camera-face-detector/nitrogen/generated/android/VisionCameraFaceDetectorOnLoad.cpp.o	19a1454d7fd2c8f0
-0	848	1777896087042848577	CMakeFiles/VisionCameraFaceDetector.dir/Users/noma4i/work/vision-camera-face-detector/example/node_modules/@noma4i/vision-camera-face-detector/nitrogen/generated/shared/c++/HybridFaceDetectionOutputSpec.cpp.o	c59801a20ff3bee
-940	982	1777896087180270623	../../../../build/intermediates/cxx/Debug/6i6t636r/obj/x86_64/libVisionCameraFaceDetector.so	6c85ccf00ed4f347
-0	805	1777896087001220066	CMakeFiles/VisionCameraFaceDetector.dir/Users/noma4i/work/vision-camera-face-detector/example/node_modules/@noma4i/vision-camera-face-detector/nitrogen/generated/android/c++/JHybridFaceDetectorSpec.cpp.o	5d510ec7ef953622
-0	940	1777896087136457090	CMakeFiles/VisionCameraFaceDetector.dir/Users/noma4i/work/vision-camera-face-detector/example/node_modules/@noma4i/vision-camera-face-detector/nitrogen/generated/android/c++/JHybridFaceDetectionOutputSpec.cpp.o	43dd0f7e8e930424
-0	722	1777896086918629372	CMakeFiles/VisionCameraFaceDetector.dir/Users/noma4i/work/vision-camera-face-detector/example/node_modules/@noma4i/vision-camera-face-detector/nitrogen/generated/shared/c++/HybridFaceDetectorSpec.cpp.o	f9a4b87aa99ebd38
-0	374	1777896086572702110	CMakeFiles/VisionCameraFaceDetector.dir/src/main/cpp/cpp-adapter.cpp.o	249445e2efd89aeb
