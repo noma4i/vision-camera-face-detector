@@ -1,7 +1,7 @@
 {
   "name": "@noma4i/vision-camera-face-detector",
-  "version": "1.0.0",
-  "description": "MLKit face detection frame processor plugin for VisionCamera V5 (Nitro)",
+  "version": "2.0.0",
+  "description": "Face detection frame processor plugin for VisionCamera V5 (Nitro). iOS: Apple Vision, Android: MLKit.",
   "source": "src/index",
   "main": "lib/index",
   "module": "lib/index",

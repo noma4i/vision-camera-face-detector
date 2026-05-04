@@ -1,8 +1,8 @@
 # @noma4i/vision-camera-face-detector
 
-Fast, Nitro-powered MLKit face detection frame processor plugin for [VisionCamera V5](https://github.com/mrousavy/react-native-vision-camera).
+Fast, Nitro-powered face detection frame processor plugin for [VisionCamera V5](https://github.com/mrousavy/react-native-vision-camera).
 
-- iOS: `GoogleMLKit/FaceDetection`
+- iOS: Apple `Vision` framework (system, no extra dependency)
 - Android: `com.google.mlkit:face-detection`
 - JS: synchronous worklet contract (`scanFaces(frame) => DetectedFace[]`)
 - Zero-bridge: powered by [`react-native-nitro-modules`](https://github.com/mrousavy/nitro)
@@ -17,7 +17,7 @@ Vision Camera V5 requires a bare React Native project (not Expo Go). Expo prebui
 
 ### iOS
 
-Minimum deployment target: **iOS 15.5** (required by `GoogleMLKit/FaceDetection 7.x`).
+Minimum deployment target: **iOS 15.5** (matches the bundled VisionCamera/Nitro requirement).
 
 In `ios/Podfile`:
 
@@ -31,7 +31,7 @@ Then:
 cd ios && pod install
 ```
 
-`GoogleMLKit/FaceDetection` is linked automatically through this package's podspec. First install downloads ~120 MB of MLKit frameworks.
+iOS uses the system `Vision` framework (`VNDetectFaceRectanglesRequest`); no extra Pod dependency is downloaded.
 
 Add to `Info.plist`:
 
@@ -117,24 +117,24 @@ export function FaceDetectorExample() {
 
 ## API
 
-| Export | Type | Description |
-|--------|------|-------------|
-| `scanFaces(frame)` | `(frame: Frame) => DetectedFace[]` | Worklet-safe synchronous face scan. Returns empty array if native plugin unavailable. |
-| `configureFaceDetector(options)` | `(options: Partial<FaceDetectorOptions>) => void` | Apply detector options. Merges with defaults. |
-| `isFaceDetectorAvailable()` | `() => boolean` | Guard before wiring frame output; false until native codegen + pod install complete. |
-| `faceDetector` | `FaceDetector \| undefined` | Raw Nitro HybridObject, resolved once at module load. |
-| `DEFAULT_FACE_DETECTOR_OPTIONS` | `FaceDetectorOptions` | Sensible defaults: `fast` perf mode, no landmarks/classifications/contours, `minFaceSize: 0.15`, tracking off. |
+| Export                           | Type                                              | Description                                                                                                    |
+| -------------------------------- | ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `scanFaces(frame)`               | `(frame: Frame) => DetectedFace[]`                | Worklet-safe synchronous face scan. Returns empty array if native plugin unavailable.                          |
+| `configureFaceDetector(options)` | `(options: Partial<FaceDetectorOptions>) => void` | Apply detector options. Merges with defaults.                                                                  |
+| `isFaceDetectorAvailable()`      | `() => boolean`                                   | Guard before wiring frame output; false until native codegen + pod install complete.                           |
+| `faceDetector`                   | `FaceDetector \| undefined`                       | Raw Nitro HybridObject, resolved once at module load.                                                          |
+| `DEFAULT_FACE_DETECTOR_OPTIONS`  | `FaceDetectorOptions`                             | Sensible defaults: `fast` perf mode, no landmarks/classifications/contours, `minFaceSize: 0.15`, tracking off. |
 
 ### `FaceDetectorOptions`
 
-| Field | Type | Default | MLKit mapping |
-|-------|------|---------|----------------|
-| `performanceMode` | `'fast' \| 'accurate'` | `'fast'` | `FaceDetectorMode` |
-| `landmarkMode` | `'none' \| 'all'` | `'none'` | `FaceLandmarkMode` |
-| `classificationMode` | `'none' \| 'all'` | `'none'` | `FaceClassificationMode` |
-| `contourMode` | `'none' \| 'all'` | `'none'` | `FaceContourMode` |
-| `minFaceSize` | `number` (0-1) | `0.15` | Fraction of frame width |
-| `enableTracking` | `boolean` | `false` | MLKit face tracking |
+| Field                | Type                   | Default  | Notes                                                                         |
+| -------------------- | ---------------------- | -------- | ----------------------------------------------------------------------------- |
+| `performanceMode`    | `'fast' \| 'accurate'` | `'fast'` | Android: MLKit `FaceDetectorMode`. iOS: ignored (Vision uses fixed pipeline). |
+| `landmarkMode`       | `'none' \| 'all'`      | `'none'` | Android: MLKit `FaceLandmarkMode`. iOS: not exposed.                          |
+| `classificationMode` | `'none' \| 'all'`      | `'none'` | Android: MLKit `FaceClassificationMode`. iOS: not exposed.                    |
+| `contourMode`        | `'none' \| 'all'`      | `'none'` | Android: MLKit `FaceContourMode`. iOS: not exposed.                           |
+| `minFaceSize`        | `number` (0-1)         | `0.15`   | Android: fraction of frame width. iOS: ignored.                               |
+| `enableTracking`     | `boolean`              | `false`  | Android: MLKit face tracking. iOS: always returns `trackingId: 0`.            |
 
 ### `DetectedFace`
 
@@ -145,7 +145,7 @@ interface DetectedFace {
 }
 
 interface DetectedFaceBounds {
-  x: number;       // pixels, frame-space
+  x: number; // pixels, frame-space
   y: number;
   width: number;
   height: number;
@@ -157,6 +157,7 @@ Bounds are in **frame pixel coordinates**, not screen coordinates. Project to sc
 ## Example
 
 A complete working example is in [`example/`](./example). It demonstrates:
+
 - Selfie camera with front-facing device
 - Face-framing guide overlay (outer dashed border + square + circle)
 - Live `idle` -> `misaligned` -> `ready` guide status
@@ -183,8 +184,8 @@ Call `frame.dispose()` **after** `scanFaces(frame)`, in a `finally` block. Nitro
 **Bounds look rotated on Android**
 Android preview orientation differs from frame orientation in portrait mode. Use the axis-swap logic from `example/src/utils/selfieGuideDetection.ts:getProjectionFrameSize`.
 
-**First pod install is slow**
-`GoogleMLKit/FaceDetection` pulls ~120 MB of frameworks on first install. Subsequent installs use the Pods cache.
+**iOS detection lacks landmarks/tracking**
+iOS uses Apple's `Vision` framework (`VNDetectFaceRectanglesRequest`), which only returns face rectangles. `landmarkMode`, `classificationMode`, `contourMode`, `enableTracking`, and `minFaceSize` are no-ops on iOS; on Android they map to the corresponding MLKit options.
 
 ## License
 

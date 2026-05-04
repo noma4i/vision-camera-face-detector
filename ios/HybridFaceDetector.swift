@@ -2,48 +2,38 @@ import AVFoundation
 import CoreMedia
 import Foundation
 import ImageIO
-@_exported import MLKitFaceDetection
-import MLKitVision
 import NitroModules
-import UIKit
+import Vision
 import VisionCamera
 
 final class HybridFaceDetector: HybridFaceDetectorSpec_base, HybridFaceDetectorSpec_protocol {
-  private var currentOptions: FaceDetectorOptions = FaceDetectorOptions(
-    performanceMode: .fast,
-    landmarkMode: .none,
-    classificationMode: .none,
-    contourMode: .none,
-    minFaceSize: 0.15,
-    enableTracking: false
-  )
-
-  private lazy var detectorRef: MLKitFaceDetection.FaceDetector = makeDetector(from: currentOptions)
-
   func configure(options: FaceDetectorOptions) throws {
-    currentOptions = options
-    detectorRef = makeDetector(from: options)
+    _ = options
   }
 
   func detectFaces(frame: any HybridFrameSpec) throws -> [DetectedFace] {
     guard let nativeFrame = frame as? NativeFrame,
-          let sampleBuffer = nativeFrame.sampleBuffer else {
+          let sampleBuffer = nativeFrame.sampleBuffer,
+          let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
       return []
     }
 
-    let visionImage = VisionImage(buffer: sampleBuffer)
-    visionImage.orientation = imageOrientation(from: sampleBuffer)
+    let request = VNDetectFaceRectanglesRequest()
+    let handler = VNImageRequestHandler(
+      cvPixelBuffer: pixelBuffer,
+      orientation: imageOrientation(from: sampleBuffer),
+      options: [:]
+    )
 
-    let faces: [MLKitFaceDetection.Face]
     do {
-      faces = try detectorRef.results(in: visionImage)
+      try handler.perform([request])
     } catch {
       return []
     }
 
-    return faces.map { face in
-      let rect = face.frame
-      let trackingId = face.hasTrackingID ? Double(face.trackingID) : 0.0
+    let imageSize = orientedImageSize(for: pixelBuffer, orientation: imageOrientation(from: sampleBuffer))
+    return (request.results ?? []).map { observation in
+      let rect = pixelRect(from: observation.boundingBox, imageSize: imageSize)
       return DetectedFace(
         bounds: DetectedFaceBounds(
           x: Double(rect.origin.x),
@@ -51,36 +41,37 @@ final class HybridFaceDetector: HybridFaceDetectorSpec_base, HybridFaceDetectorS
           width: Double(rect.size.width),
           height: Double(rect.size.height)
         ),
-        trackingId: trackingId
+        trackingId: 0.0
       )
     }
   }
 
-  private func makeDetector(from options: FaceDetectorOptions) -> MLKitFaceDetection.FaceDetector {
-    let mlOptions = MLKitFaceDetection.FaceDetectorOptions()
-    mlOptions.performanceMode = options.performanceMode == .accurate ? .accurate : .fast
-    mlOptions.landmarkMode = options.landmarkMode == .all ? .all : .none
-    mlOptions.classificationMode = options.classificationMode == .all ? .all : .none
-    mlOptions.contourMode = options.contourMode == .all ? .all : .none
-    mlOptions.minFaceSize = CGFloat(options.minFaceSize)
-    mlOptions.isTrackingEnabled = options.enableTracking
-    return MLKitFaceDetection.FaceDetector.faceDetector(options: mlOptions)
+  private func orientedImageSize(for pixelBuffer: CVPixelBuffer, orientation: CGImagePropertyOrientation) -> CGSize {
+    let width = CGFloat(CVPixelBufferGetWidth(pixelBuffer))
+    let height = CGFloat(CVPixelBufferGetHeight(pixelBuffer))
+
+    switch orientation {
+    case .left, .leftMirrored, .right, .rightMirrored:
+      return CGSize(width: height, height: width)
+    default:
+      return CGSize(width: width, height: height)
+    }
   }
 
-  private func imageOrientation(from sampleBuffer: CMSampleBuffer) -> UIImage.Orientation {
+  private func pixelRect(from normalizedRect: CGRect, imageSize: CGSize) -> CGRect {
+    CGRect(
+      x: normalizedRect.origin.x * imageSize.width,
+      y: (1.0 - normalizedRect.origin.y - normalizedRect.height) * imageSize.height,
+      width: normalizedRect.width * imageSize.width,
+      height: normalizedRect.height * imageSize.height
+    )
+  }
+
+  private func imageOrientation(from sampleBuffer: CMSampleBuffer) -> CGImagePropertyOrientation {
     let attachments = CMGetAttachment(sampleBuffer, key: kCGImagePropertyOrientation, attachmentModeOut: nil) as? UInt32
     guard let raw = attachments, let cgOrientation = CGImagePropertyOrientation(rawValue: raw) else {
       return .up
     }
-    switch cgOrientation {
-    case .up: return .up
-    case .upMirrored: return .upMirrored
-    case .down: return .down
-    case .downMirrored: return .downMirrored
-    case .left: return .left
-    case .leftMirrored: return .leftMirrored
-    case .right: return .right
-    case .rightMirrored: return .rightMirrored
-    }
+    return cgOrientation
   }
 }

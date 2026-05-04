@@ -26,7 +26,6 @@ Pod::Spec.new do |s|
 
   s.dependency "React-Core"
   s.dependency "VisionCamera"
-  s.dependency "GoogleMLKit/FaceDetection", "~> 7.0"
 
   load File.join(__dir__, 'nitrogen/generated/ios/VisionCameraFaceDetector+autolinking.rb')
   add_nitrogen_files(s)
