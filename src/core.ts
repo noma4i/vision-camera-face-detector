@@ -17,6 +17,8 @@ export type FaceGuideStatus = 'unavailable' | 'idle' | 'misaligned' | 'ready';
 
 export type FaceGuideUnits = 'ratio' | 'px';
 
+export type FaceGuideShortcut = 'selfie' | 'none';
+
 export interface FacePoint {
   x: number;
   y: number;
@@ -50,6 +52,8 @@ export interface FaceGuideCircleConfig {
 
 export type FaceGuideConfig = FaceGuideRectConfig | FaceGuideCircleConfig;
 
+export type FaceGuideInput = FaceGuideShortcut | FaceGuideConfig;
+
 export interface AndroidFaceDetectorConfig {
   performanceMode?: FaceDetectorPerformanceMode;
   landmarkMode?: FaceDetectorLandmarkMode;
@@ -62,7 +66,7 @@ export interface AndroidFaceDetectorConfig {
 export interface FaceDetectorConfig {
   preset?: FaceDetectorPreset;
   fps?: number;
-  guide?: FaceGuideConfig;
+  guide?: FaceGuideInput;
   android?: AndroidFaceDetectorConfig;
   stability?: {
     readySamples?: number;
@@ -172,10 +176,20 @@ const normalizePositiveNumber = (value: number | undefined, fallback: number): n
   return value;
 };
 
+const resolveGuide = (
+  guide: FaceGuideInput | undefined,
+  preset: FaceDetectorPreset
+): FaceGuideConfig | undefined => {
+  if (guide === 'none') return undefined;
+  if (guide === 'selfie') return DEFAULT_FACE_GUIDE;
+  if (guide) return guide;
+  return preset === 'selfie' ? DEFAULT_FACE_GUIDE : undefined;
+};
+
 export const defineFaceDetector = (
   config: FaceDetectorConfig = {}
 ): NormalizedFaceDetectorConfig => {
-  const preset = config.preset ?? 'fast';
+  const preset = config.preset ?? 'selfie';
   const fps = clamp(normalizePositiveNumber(config.fps, PRESET_FPS[preset]), 1, 60);
   const presetOptions = PRESET_NATIVE_OPTIONS[preset];
   const android = config.android ?? {};
@@ -184,7 +198,7 @@ export const defineFaceDetector = (
     preset,
     fps,
     frameIntervalMs: 1000 / fps,
-    guide: config.guide ?? (preset === 'selfie' ? DEFAULT_FACE_GUIDE : undefined),
+    guide: resolveGuide(config.guide, preset),
     nativeOptions: {
       performanceMode: android.performanceMode ?? presetOptions.performanceMode,
       landmarkMode: android.landmarkMode ?? presetOptions.landmarkMode,

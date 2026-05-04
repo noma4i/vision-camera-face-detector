@@ -8,14 +8,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.0.0] - 2026-05-04
 
 ### Added
+- **BREAKING:** `useFaceDetector(config)` now returns ready-to-pass `camera.outputs`, so apps can spread `<Camera {...face.camera} />` instead of manually appending the detector output.
+- **BREAKING:** `useFaceDetector(config)` now defaults to `preset: 'selfie'`, `preview: 'screen'`, and a default selfie guide for the shortest capture-screen DSL.
+- `useFaceDetector(config)` now accepts `outputs`, `preview`, and guide shortcuts (`'selfie'` / `'none'`) for simpler app code.
 - **BREAKING:** New declarative `useFaceDetector(config)` API for VisionCamera native outputs, native frame throttling, primary-face selection, guide evaluation, and stable status.
 - **BREAKING:** New Nitro `FaceDetectionOutput` extends VisionCamera V5 `CameraOutput`, so face detection runs in native code without JS frame processors.
 - `defineFaceDetector(config)` and pure helpers for config normalization, guide projection, primary-face selection, and status stability.
 - Unit tests for the new pure DSL/DX layer.
 
 ### Changed
+- **BREAKING:** `previewWidth` / `previewHeight` were replaced by optional `preview: 'screen' | { width; height }`.
+- **BREAKING:** `isReady` / `isAvailable` were renamed to `ready` / `available`.
 - **BREAKING:** Removed the old public `scanFaces`, `configureFaceDetector`, `faceDetector`, and `DEFAULT_FACE_DETECTOR_OPTIONS` API surface.
 - **BREAKING:** `trackingId` is now optional. Android returns MLKit tracking ids when available; iOS returns no tracking id.
+- README now documents the v3 DSL first, with a minimal copy-paste `useFaceDetector({ preset: 'selfie', outputs: photo })` example.
 - Android detector configuration now avoids no-op rebuilds, closes replaced MLKit clients, and uses a bounded detection wait.
 - Android now includes an autolink package bootstrap so `VisionCameraFaceDetectorOnLoad` is loaded into the APK.
 - Nitro generation script now points at `src` specs.

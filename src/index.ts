@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useWindowDimensions } from 'react-native';
 import { NitroModules } from 'react-native-nitro-modules';
+import type { CameraOutput } from 'react-native-vision-camera';
 import {
   applyGuideStability,
   defineFaceDetector,
@@ -23,6 +25,7 @@ import type {
   FaceDetectorConfig,
   FaceDetectorPreset,
   FaceGuideConfig,
+  FaceGuideInput,
   FaceGuideStabilityState,
   FaceGuideStatus,
   FaceGuideUnits,
@@ -54,6 +57,7 @@ export type {
   FaceDetectorPerformanceMode,
   FaceDetectorPreset,
   FaceGuideConfig,
+  FaceGuideInput,
   FaceGuideStabilityState,
   FaceGuideStatus,
   FaceGuideUnits,
@@ -62,17 +66,25 @@ export type {
   NormalizedFaceDetectorConfig
 };
 
+export type FaceDetectorPreview = 'screen' | {
+  width: number;
+  height: number;
+};
+
 export interface UseFaceDetectorOptions extends FaceDetectorConfig {
-  previewWidth: number;
-  previewHeight: number;
+  preview?: FaceDetectorPreview;
+  outputs?: CameraOutput | CameraOutput[];
 }
 
 export interface UseFaceDetectorResult {
+  camera: {
+    outputs: CameraOutput[];
+  };
   output: FaceDetectionOutput | undefined;
   status: FaceGuideStatus;
   result: FaceDetectionResult;
-  isAvailable: boolean;
-  isReady: boolean;
+  available: boolean;
+  ready: boolean;
 }
 
 const UNAVAILABLE_RESULT: FaceDetectionResult = {
@@ -110,11 +122,35 @@ export const isFaceDetectorAvailable = (): boolean => {
   return createFaceDetectionOutput() !== undefined;
 };
 
-export const useFaceDetector = ({
-  previewWidth,
-  previewHeight,
-  ...config
-}: UseFaceDetectorOptions): UseFaceDetectorResult => {
+const normalizeOutputs = (outputs: CameraOutput | CameraOutput[] | undefined): CameraOutput[] => {
+  if (!outputs) return [];
+  return Array.isArray(outputs) ? outputs : [outputs];
+};
+
+const areOutputsEqual = (a: readonly CameraOutput[], b: readonly CameraOutput[]): boolean => {
+  if (a.length !== b.length) return false;
+  return a.every((output, index) => output === b[index]);
+};
+
+const useStableOutputs = (
+  outputs: CameraOutput | CameraOutput[] | undefined
+): CameraOutput[] => {
+  const nextOutputs = normalizeOutputs(outputs);
+  const stableOutputsRef = useRef<CameraOutput[]>(nextOutputs);
+
+  if (!areOutputsEqual(stableOutputsRef.current, nextOutputs)) {
+    stableOutputsRef.current = nextOutputs;
+  }
+
+  return stableOutputsRef.current;
+};
+
+export const useFaceDetector = (options: UseFaceDetectorOptions = {}): UseFaceDetectorResult => {
+  const { preview = 'screen', outputs, ...config } = options;
+  const window = useWindowDimensions();
+  const externalOutputs = useStableOutputs(outputs);
+  const previewWidth = preview === 'screen' ? window.width : preview.width;
+  const previewHeight = preview === 'screen' ? window.height : preview.height;
   const configKey = JSON.stringify(config);
   const normalizedConfig = useMemo(() => defineFaceDetector(config), [configKey]);
   const output = useMemo(() => createFaceDetectionOutput(), []);
@@ -168,12 +204,19 @@ export const useFaceDetector = ({
   }, [applyDetectionResult, isAvailable, output]);
 
   const status = isAvailable ? result.status : 'unavailable';
+  const cameraOutputs = useMemo<CameraOutput[]>(
+    () => (isAvailable && output ? [...externalOutputs, output] : externalOutputs),
+    [externalOutputs, isAvailable, output]
+  );
 
   return {
+    camera: {
+      outputs: cameraOutputs
+    },
     output: isAvailable ? output : undefined,
     status,
     result,
-    isAvailable,
-    isReady: status === 'ready'
+    available: isAvailable,
+    ready: status === 'ready'
   };
 };

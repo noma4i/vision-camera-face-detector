@@ -53,10 +53,10 @@ const FaceDetectorDemo: React.FC<FaceDetectorDemoProps> = ({ onCapture, onClose 
     }),
     [guideLayout.frameLeft, guideLayout.frameSize, guideLayout.frameTop]
   );
-  const { status: guideStatus, output: detectorOutput } = useFaceDetector({
+  const face = useFaceDetector({
     preset: 'selfie',
-    previewWidth: SCREEN_WIDTH,
-    previewHeight: SCREEN_HEIGHT,
+    preview: { width: SCREEN_WIDTH, height: SCREEN_HEIGHT },
+    outputs: photoOutput,
     guide
   });
   const [appState, setAppState] = useState<AppStateStatus>(AppState.currentState);
@@ -64,13 +64,8 @@ const FaceDetectorDemo: React.FC<FaceDetectorDemoProps> = ({ onCapture, onClose 
   const [isCaptureHandoffInFlight, setIsCaptureHandoffInFlight] = useState(false);
   const [isCameraStarted, setIsCameraStarted] = useState(false);
   const isActive = appState === 'active' && !isCaptureHandoffInFlight;
-  const isGuideReady = guideStatus === 'ready';
+  const isGuideReady = face.ready;
   const isCaptureDisabled = !isCameraStarted || isCapturing || isCaptureHandoffInFlight;
-
-  const outputs = useMemo(
-    () => (detectorOutput ? [photoOutput, detectorOutput] : [photoOutput]),
-    [photoOutput, detectorOutput]
-  );
 
   useEffect(() => {
     const sub = AppState.addEventListener('change', setAppState);
@@ -137,10 +132,10 @@ const FaceDetectorDemo: React.FC<FaceDetectorDemoProps> = ({ onCapture, onClose 
     <View style={styles.container}>
       {device ? (
         <Camera
+          {...face.camera}
           style={StyleSheet.absoluteFill}
           device={device}
           constraints={SELFIE_CAMERA_CONSTRAINTS}
-          outputs={outputs}
           isActive={isActive}
           mirrorMode="on"
           onStarted={handleCameraStarted}

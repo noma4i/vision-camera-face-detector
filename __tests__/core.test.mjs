@@ -24,6 +24,25 @@ test('defineFaceDetector applies selfie defaults and clamps unsafe numbers', () 
   assert.equal(config.guide?.shape, 'circle');
 });
 
+test('defineFaceDetector defaults to the selfie DSL', () => {
+  const config = defineFaceDetector();
+
+  assert.equal(config.preset, 'selfie');
+  assert.equal(config.fps, 8);
+  assert.equal(config.nativeOptions.performanceMode, 'accurate');
+  assert.equal(config.nativeOptions.enableTracking, true);
+  assert.equal(config.guide?.shape, 'circle');
+});
+
+test('defineFaceDetector supports guide shortcuts', () => {
+  const withoutGuide = defineFaceDetector({ guide: 'none' });
+  const selfieGuide = defineFaceDetector({ preset: 'fast', guide: 'selfie' });
+
+  assert.equal(withoutGuide.guide, undefined);
+  assert.equal(selfieGuide.preset, 'fast');
+  assert.equal(selfieGuide.guide?.shape, 'circle');
+});
+
 test('pickPrimaryFace returns the largest face by bounds area', () => {
   const small = { bounds: { x: 0, y: 0, width: 20, height: 20 } };
   const large = { bounds: { x: 0, y: 0, width: 50, height: 40 } };

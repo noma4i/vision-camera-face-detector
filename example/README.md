@@ -7,7 +7,7 @@ Bare React Native app demonstrating [`@noma4i/vision-camera-face-detector`](../)
 - Front camera preview (VisionCamera V5, Nitro outputs API).
 - Face framing guide overlay: outer dashed border, square dashed outline, circular guide ring.
 - Live status: `idle` (no face) -> `misaligned` (face outside guide) -> `ready` (face centered).
-- Package-level `useFaceDetector()` hook provides a native CameraOutput, throttling, and guide evaluation.
+- Package-level `useFaceDetector()` hook accepts photo outputs, returns ready-to-pass `camera.outputs`, and provides guide evaluation.
 - Haptic feedback when entering `ready` state.
 - Photo capture via `usePhotoOutput`; captured photo shown on the next screen.
 
@@ -67,18 +67,3 @@ yarn nitrogen
 ```
 
 Then rebuild the example (`pod install` on iOS, gradle sync on Android).
-
-## Troubleshooting
-
-**iOS build fails after changing native specs**
-Ensure `platform :ios, '15.5'` in `ios/Podfile`, run `yarn nitrogen` from the library root, then re-run `bundle exec pod install`.
-
-**Android build fails with duplicate `libreactnative.so`**
-The library's `android/build.gradle` excludes shared JNI libs (`libjsi`, `libreactnative`, `libfbjni`, `libc++_shared`, `libNitroModules`). If you run into duplicates, run `cd android && ./gradlew clean` and rebuild.
-
-**Camera permission never prompts**
-iOS: verify `NSCameraUsageDescription` is in `ios/FaceDetectorExample/Info.plist`.
-Android: verify `<uses-permission android:name="android.permission.CAMERA" />` in `android/app/src/main/AndroidManifest.xml`.
-
-**Metro can't resolve `react` or `react-native`**
-The `metro.config.js` blocks the library's `node_modules/<peer>` to force resolution to example's copies. If you see "duplicate React" crashes, delete `../node_modules/react*` (library shouldn't install peers).
