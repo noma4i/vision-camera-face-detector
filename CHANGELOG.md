@@ -46,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Android no longer delivers stale in-flight MLKit results after the JS callback is replaced or cleared.
 - Example selfie guide tolerance is tighter, so the UI no longer marks heavily misaligned partial faces as ready.
 - Selfie guide readiness is now more forgiving near the frame edge: default tolerance is 40px, scanning is 12 FPS, and ready transitions no longer wait for two samples.
+- Android example guide sizing now uses the actual root layout dimensions, so portrait screens no longer render oversized off-screen guides when startup dimensions are swapped.
 
 ## [2.0.0] - 2026-05-04
 
