@@ -1,13 +1,6 @@
 import { Dimensions } from 'react-native';
 import type { PhotoGuideLayout } from '../types';
 
-interface PhotoGuideDetectionBounds {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
-
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 const PHOTO_GUIDE_LAYOUT_RATIOS = {
@@ -19,8 +12,7 @@ const PHOTO_GUIDE_LAYOUT_RATIOS = {
 
 const PHOTO_GUIDE_DIMENSIONS = {
   FRAME_PADDING_OFFSET: 40,
-  FRAME_POSITION_OFFSET: -20,
-  DETECTION_RELAX_OFFSET: 120
+  FRAME_POSITION_OFFSET: -20
 } as const;
 
 export const getPhotoGuideLayout = (
@@ -42,22 +34,6 @@ export const getPhotoGuideLayout = (
     centerSquareFrameTop:
       screenHeight * PHOTO_GUIDE_LAYOUT_RATIOS.FRAME_TOP +
       PHOTO_GUIDE_DIMENSIONS.FRAME_POSITION_OFFSET
-  };
-};
-
-export const getPhotoGuideDetectionBounds = (
-  screenWidth: number = SCREEN_WIDTH,
-  screenHeight: number = SCREEN_HEIGHT
-): PhotoGuideDetectionBounds => {
-  const layout = getPhotoGuideLayout(screenWidth, screenHeight);
-  const relax = PHOTO_GUIDE_DIMENSIONS.DETECTION_RELAX_OFFSET;
-  const detectionSize = layout.centerSquareFrameSize + 2 * relax;
-
-  return {
-    x: (layout.centerSquareFrameLeft - relax) / screenWidth,
-    y: (layout.centerSquareFrameTop - relax) / screenHeight,
-    width: detectionSize / screenWidth,
-    height: detectionSize / screenHeight
   };
 };
 

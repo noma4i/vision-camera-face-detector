@@ -1910,30 +1910,6 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - VisionCameraFaceDetector (3.0.0):
-    - hermes-engine
-    - NitroModules
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Core
-    - React-Core-prebuilt
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-jsi
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-renderercss
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - ReactNativeDependencies
-    - VisionCamera
-    - Yoga
   - Yoga (0.0.0)
 
 DEPENDENCIES:
@@ -2015,7 +1991,6 @@ DEPENDENCIES:
   - ReactNativeDependencies (from `../node_modules/react-native/third-party-podspecs/ReactNativeDependencies.podspec`)
   - RNReactNativeHapticFeedback (from `../node_modules/react-native-haptic-feedback`)
   - VisionCamera (from `../node_modules/react-native-vision-camera`)
-  - "VisionCameraFaceDetector (from `../node_modules/@noma4i/vision-camera-face-detector`)"
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 EXTERNAL SOURCES:
@@ -2174,8 +2149,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-haptic-feedback"
   VisionCamera:
     :path: "../node_modules/react-native-vision-camera"
-  VisionCameraFaceDetector:
-    :path: "../node_modules/@noma4i/vision-camera-face-detector"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -2257,9 +2230,8 @@ SPEC CHECKSUMS:
   ReactNativeDependencies: 431aea32eddb4a304edf32d7d397cec5e5cd17b5
   RNReactNativeHapticFeedback: 16e5f7fd37e2acc5a33ea14f48bfd88ff43776ee
   VisionCamera: 439a4b0d9453eb5ada307ccea6b545b171480e09
-  VisionCameraFaceDetector: cb8e14bfb2884080822c76550bc7aedbfdaa5467
   Yoga: b1085f68c014785350a2afdc95eaef0d49f23ccb
 
 PODFILE CHECKSUM: 06b4c9e2c9bab62e7157c36953262d174789f11a
 
-COCOAPODS: 1.16.2
+COCOAPODS: 1.15.2

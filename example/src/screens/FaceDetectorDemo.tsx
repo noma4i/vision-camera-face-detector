@@ -10,7 +10,7 @@ import {
   type AppStateStatus
 } from 'react-native';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Camera, useCameraDevice, usePhotoOutput } from 'react-native-vision-camera';
 import { useFaceDetector } from '@noma4i/vision-camera-face-detector';
 import OverlayButton from '../components/OverlayButton';
@@ -42,6 +42,10 @@ const FaceDetectorDemo: React.FC<FaceDetectorDemoProps> = ({ onCapture, onClose 
   const insets = useSafeAreaInsets();
   const guideLayout = useMemo(() => getPhotoGuideLayout(SCREEN_WIDTH, SCREEN_HEIGHT), []);
   const closeButtonStyle = useMemo(() => [styles.closeButton, { top: 16 + insets.top }], [insets.top]);
+  const bottomSectionStyle = useMemo(
+    () => [styles.bottomSection, { paddingBottom: 40 + insets.bottom }],
+    [insets.bottom]
+  );
   const guide = useMemo(
     () => ({
       shape: 'circle' as const,
@@ -49,7 +53,7 @@ const FaceDetectorDemo: React.FC<FaceDetectorDemoProps> = ({ onCapture, onClose 
       centerX: guideLayout.frameLeft + guideLayout.frameSize * 0.5,
       centerY: guideLayout.frameTop + guideLayout.frameSize * 0.5,
       size: guideLayout.frameSize,
-      tolerancePx: 24
+      tolerancePx: 40
     }),
     [guideLayout.frameLeft, guideLayout.frameSize, guideLayout.frameTop]
   );
@@ -65,7 +69,8 @@ const FaceDetectorDemo: React.FC<FaceDetectorDemoProps> = ({ onCapture, onClose 
   const [isCameraStarted, setIsCameraStarted] = useState(false);
   const isActive = appState === 'active' && !isCaptureHandoffInFlight;
   const isGuideReady = face.ready;
-  const isCaptureDisabled = !isCameraStarted || isCapturing || isCaptureHandoffInFlight;
+  const isCaptureDisabled =
+    !isCameraStarted || !isGuideReady || isCapturing || isCaptureHandoffInFlight;
 
   useEffect(() => {
     const sub = AppState.addEventListener('change', setAppState);
@@ -97,7 +102,7 @@ const FaceDetectorDemo: React.FC<FaceDetectorDemoProps> = ({ onCapture, onClose 
   }, []);
 
   const handleTakePhoto = useCallback(async () => {
-    if (!isCameraStarted || isCapturing || isCaptureHandoffInFlight) {
+    if (!isCameraStarted || !isGuideReady || isCapturing || isCaptureHandoffInFlight) {
       return;
     }
     setIsCapturing(true);
@@ -117,7 +122,14 @@ const FaceDetectorDemo: React.FC<FaceDetectorDemoProps> = ({ onCapture, onClose 
       setIsCaptureHandoffInFlight(false);
       logger.error(COMPONENT_NAME, 'Failed to capture selfie photo', error);
     }
-  }, [isCameraStarted, isCaptureHandoffInFlight, isCapturing, onCapture, photoOutput]);
+  }, [
+    isCameraStarted,
+    isCaptureHandoffInFlight,
+    isCapturing,
+    isGuideReady,
+    onCapture,
+    photoOutput
+  ]);
 
   const captureButtonStyle = useCallback(
     ({ pressed }: { pressed: boolean }) => [
@@ -146,9 +158,8 @@ const FaceDetectorDemo: React.FC<FaceDetectorDemoProps> = ({ onCapture, onClose 
           <Text style={styles.fallbackText}>Front camera not available</Text>
         </View>
       )}
-      <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
+      <View pointerEvents="none" style={StyleSheet.absoluteFill}>
         <View
-          pointerEvents="none"
           style={[
             styles.outerFrameOverlay,
             {
@@ -159,69 +170,58 @@ const FaceDetectorDemo: React.FC<FaceDetectorDemoProps> = ({ onCapture, onClose 
           ]}
         />
 
-        <OverlayButton
-          buttonStyle={closeButtonStyle}
-          onPress={onClose}
-          accessibilityLabel="Close"
+        <View
+          style={[
+            styles.centerSquareFrame,
+            {
+              borderColor: isGuideReady
+                ? `${GUIDE_READY_BORDER_COLOR}7A`
+                : `${GUIDE_IDLE_BORDER_COLOR}7A`,
+              width: guideLayout.centerSquareFrameSize,
+              height: guideLayout.centerSquareFrameSize,
+              top: guideLayout.centerSquareFrameTop,
+              left: guideLayout.centerSquareFrameLeft
+            }
+          ]}
+        />
+
+        <View
+          style={[
+            styles.circularFrame,
+            {
+              borderColor: isGuideReady ? GUIDE_READY_BORDER_COLOR : GUIDE_IDLE_BORDER_COLOR,
+              width: guideLayout.frameSize,
+              height: guideLayout.frameSize,
+              borderRadius: guideLayout.frameRadius,
+              top: guideLayout.frameTop,
+              left: guideLayout.frameLeft
+            }
+          ]}
         >
-          <Text style={styles.closeIcon}>×</Text>
-        </OverlayButton>
+          <Text style={styles.innerProfileText}>Profile Picture</Text>
+        </View>
+      </View>
 
-        <View style={styles.centerSection}>
+      <OverlayButton buttonStyle={closeButtonStyle} onPress={onClose} accessibilityLabel="Close">
+        <Text style={styles.closeIcon}>×</Text>
+      </OverlayButton>
+
+      <View style={bottomSectionStyle}>
+        <Text style={[styles.guideMessage, isGuideReady && styles.guideMessageReady]}>
+          {isGuideReady ? 'Perfect. Take the photo.' : 'Center one face inside the guide.'}
+        </Text>
+
+        <Pressable
+          onPress={handleTakePhoto}
+          style={captureButtonStyle}
+          disabled={isCaptureDisabled}
+          accessibilityLabel="Take photo"
+        >
           <View
-            pointerEvents="none"
-            style={[
-              styles.centerSquareFrame,
-              {
-                borderColor: isGuideReady
-                  ? `${GUIDE_READY_BORDER_COLOR}7A`
-                  : `${GUIDE_IDLE_BORDER_COLOR}7A`,
-                width: guideLayout.centerSquareFrameSize,
-                height: guideLayout.centerSquareFrameSize,
-                top: guideLayout.centerSquareFrameTop,
-                left: guideLayout.centerSquareFrameLeft
-              }
-            ]}
+            style={[styles.captureButtonInner, isGuideReady && styles.captureButtonInnerReady]}
           />
-
-          <View
-            pointerEvents="none"
-            style={[
-              styles.circularFrame,
-              {
-                borderColor: isGuideReady ? GUIDE_READY_BORDER_COLOR : GUIDE_IDLE_BORDER_COLOR,
-                width: guideLayout.frameSize,
-                height: guideLayout.frameSize,
-                borderRadius: guideLayout.frameRadius,
-                top: guideLayout.frameTop,
-                left: guideLayout.frameLeft
-              }
-            ]}
-          >
-            <Text style={styles.innerProfileText}>Profile Picture</Text>
-          </View>
-        </View>
-
-        <View style={styles.bottomSection}>
-          <Text style={[styles.guideMessage, isGuideReady && styles.guideMessageReady]}>
-            {isGuideReady ? 'Perfect. Take the photo.' : 'Center one face inside the guide.'}
-          </Text>
-
-          <Pressable
-            onPress={handleTakePhoto}
-            style={captureButtonStyle}
-            disabled={isCaptureDisabled}
-            accessibilityLabel="Take photo"
-          >
-            <View
-              style={[
-                styles.captureButtonInner,
-                isGuideReady && styles.captureButtonInnerReady
-              ]}
-            />
-          </Pressable>
-        </View>
-      </SafeAreaView>
+        </Pressable>
+      </View>
     </View>
   );
 };
@@ -231,9 +231,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.black
   },
-  safeArea: {
-    flex: 1
-  },
   deviceFallback: {
     ...StyleSheet.absoluteFill,
     backgroundColor: COLORS.black,
@@ -242,9 +239,6 @@ const styles = StyleSheet.create({
   },
   fallbackText: {
     color: COLORS.white
-  },
-  centerSection: {
-    flex: 1
   },
   outerFrameOverlay: {
     position: 'absolute',
@@ -278,9 +272,12 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   bottomSection: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
     alignItems: 'center',
     paddingHorizontal: 24,
-    paddingBottom: 40,
     gap: 24
   },
   guideMessage: {
