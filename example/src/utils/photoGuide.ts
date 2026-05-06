@@ -15,29 +15,34 @@ const PHOTO_GUIDE_DIMENSIONS = {
   FRAME_POSITION_OFFSET: -20
 } as const;
 
+const getPortraitSize = (width: number, height: number) => ({
+  width: Math.min(width, height),
+  height: Math.max(width, height)
+});
+
 export const getPhotoGuideLayout = (
   screenWidth: number = SCREEN_WIDTH,
   screenHeight: number = SCREEN_HEIGHT
 ): PhotoGuideLayout => {
-  const frameSize = screenWidth * PHOTO_GUIDE_LAYOUT_RATIOS.FRAME_SIZE;
+  const size = getPortraitSize(screenWidth, screenHeight);
+  const frameSize = size.width * PHOTO_GUIDE_LAYOUT_RATIOS.FRAME_SIZE;
 
   return {
     frameSize,
     frameRadius: frameSize * 0.5,
-    frameLeft: (screenWidth - frameSize) / 2,
-    frameTop: screenHeight * PHOTO_GUIDE_LAYOUT_RATIOS.FRAME_TOP,
-    outerFrameTop: screenHeight * PHOTO_GUIDE_LAYOUT_RATIOS.OUTER_FRAME_TOP,
-    outerFrameHeight: screenHeight * PHOTO_GUIDE_LAYOUT_RATIOS.OUTER_FRAME_HEIGHT,
+    frameLeft: (size.width - frameSize) / 2,
+    frameTop: size.height * PHOTO_GUIDE_LAYOUT_RATIOS.FRAME_TOP,
+    outerFrameTop: size.height * PHOTO_GUIDE_LAYOUT_RATIOS.OUTER_FRAME_TOP,
+    outerFrameHeight: size.height * PHOTO_GUIDE_LAYOUT_RATIOS.OUTER_FRAME_HEIGHT,
     centerSquareFrameSize: frameSize + PHOTO_GUIDE_DIMENSIONS.FRAME_PADDING_OFFSET,
     centerSquareFrameLeft:
-      (screenWidth - frameSize) / 2 + PHOTO_GUIDE_DIMENSIONS.FRAME_POSITION_OFFSET,
+      (size.width - frameSize) / 2 + PHOTO_GUIDE_DIMENSIONS.FRAME_POSITION_OFFSET,
     centerSquareFrameTop:
-      screenHeight * PHOTO_GUIDE_LAYOUT_RATIOS.FRAME_TOP +
+      size.height * PHOTO_GUIDE_LAYOUT_RATIOS.FRAME_TOP +
       PHOTO_GUIDE_DIMENSIONS.FRAME_POSITION_OFFSET
   };
 };
 
 export const SCREEN_DIMENSIONS = {
-  width: SCREEN_WIDTH,
-  height: SCREEN_HEIGHT
+  ...getPortraitSize(SCREEN_WIDTH, SCREEN_HEIGHT)
 };

@@ -2,12 +2,13 @@ import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import {
   AppState,
   BackHandler,
-  Dimensions,
+  type LayoutChangeEvent,
   Pressable,
   StyleSheet,
   Text,
   View,
-  type AppStateStatus
+  type AppStateStatus,
+  useWindowDimensions
 } from 'react-native';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -19,8 +20,6 @@ import { logger } from '../utils/logger';
 import { getPhotoGuideLayout } from '../utils/photoGuide';
 import { isAndroid } from '../utils/platform';
 import type { FaceDetectorDemoProps } from '../types';
-
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 const GUIDE_READY_BORDER_COLOR = COLORS.success;
 const GUIDE_IDLE_BORDER_COLOR = COLORS.white;
@@ -36,11 +35,21 @@ const SELFIE_PHOTO_OUTPUT_OPTIONS = {
 
 const SELFIE_CAMERA_CONSTRAINTS = [{ fps: 30 }];
 
+const getPortraitSize = (width: number, height: number) => ({
+  width: Math.min(width, height),
+  height: Math.max(width, height)
+});
+
 const FaceDetectorDemo: React.FC<FaceDetectorDemoProps> = ({ onCapture, onClose }) => {
   const device = useCameraDevice('front');
+  const window = useWindowDimensions();
   const photoOutput = usePhotoOutput(SELFIE_PHOTO_OUTPUT_OPTIONS);
   const insets = useSafeAreaInsets();
-  const guideLayout = useMemo(() => getPhotoGuideLayout(SCREEN_WIDTH, SCREEN_HEIGHT), []);
+  const [layoutSize, setLayoutSize] = useState(() => getPortraitSize(window.width, window.height));
+  const guideLayout = useMemo(
+    () => getPhotoGuideLayout(layoutSize.width, layoutSize.height),
+    [layoutSize.height, layoutSize.width]
+  );
   const closeButtonStyle = useMemo(() => [styles.closeButton, { top: 16 + insets.top }], [insets.top]);
   const bottomSectionStyle = useMemo(
     () => [styles.bottomSection, { paddingBottom: 40 + insets.bottom }],
@@ -59,7 +68,7 @@ const FaceDetectorDemo: React.FC<FaceDetectorDemoProps> = ({ onCapture, onClose 
   );
   const face = useFaceDetector({
     preset: 'selfie',
-    preview: { width: SCREEN_WIDTH, height: SCREEN_HEIGHT },
+    preview: { width: layoutSize.width, height: layoutSize.height },
     outputs: photoOutput,
     guide
   });
@@ -91,6 +100,16 @@ const FaceDetectorDemo: React.FC<FaceDetectorDemoProps> = ({ onCapture, onClose 
     });
     return () => sub.remove();
   }, [onClose]);
+
+  const handleContainerLayout = useCallback((event: LayoutChangeEvent) => {
+    const { width, height } = event.nativeEvent.layout;
+    const nextSize = getPortraitSize(width, height);
+    setLayoutSize((currentSize) => (
+      currentSize.width === nextSize.width && currentSize.height === nextSize.height
+        ? currentSize
+        : nextSize
+    ));
+  }, []);
 
   const handleCameraStarted = useCallback(() => {
     logger.info(COMPONENT_NAME, 'Camera started');
@@ -141,7 +160,7 @@ const FaceDetectorDemo: React.FC<FaceDetectorDemoProps> = ({ onCapture, onClose 
   );
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} onLayout={handleContainerLayout}>
       {device ? (
         <Camera
           {...face.camera}
