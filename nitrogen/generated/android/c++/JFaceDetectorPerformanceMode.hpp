@@ -10,7 +10,7 @@
 #include <fbjni/fbjni.h>
 #include "FaceDetectorPerformanceMode.hpp"
 
-namespace margelo::nitro::facedetector {
+namespace margelo::nitro::noma4i::visioncamerafacedetector {
 
   using namespace facebook;
 
@@ -19,7 +19,7 @@ namespace margelo::nitro::facedetector {
    */
   struct JFaceDetectorPerformanceMode final: public jni::JavaClass<JFaceDetectorPerformanceMode> {
   public:
-    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/facedetector/FaceDetectorPerformanceMode;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/noma4i/visioncamerafacedetector/FaceDetectorPerformanceMode;";
 
   public:
     /**
@@ -55,4 +55,4 @@ namespace margelo::nitro::facedetector {
     }
   };
 
-} // namespace margelo::nitro::facedetector
+} // namespace margelo::nitro::noma4i::visioncamerafacedetector

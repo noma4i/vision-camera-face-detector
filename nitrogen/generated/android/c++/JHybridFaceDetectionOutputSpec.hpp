@@ -13,20 +13,22 @@
 
 // Forward declaration of `JHybridCameraOutputSpec` to properly resolve imports.
 namespace margelo::nitro::camera { class JHybridCameraOutputSpec; }
+#include <VisionCamera/CameraOrientation.hpp>
 #include <VisionCamera/JHybridCameraOutputSpec.hpp>
+#include <VisionCamera/MediaType.hpp>
 
-namespace margelo::nitro::facedetector {
+namespace margelo::nitro::noma4i::visioncamerafacedetector {
 
   using namespace facebook;
 
   class JHybridFaceDetectionOutputSpec: public virtual HybridFaceDetectionOutputSpec, public virtual margelo::nitro::camera::JHybridCameraOutputSpec {
   public:
     struct JavaPart: public jni::JavaClass<JavaPart, margelo::nitro::camera::JHybridCameraOutputSpec::JavaPart> {
-      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/facedetector/HybridFaceDetectionOutputSpec;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/noma4i/visioncamerafacedetector/HybridFaceDetectionOutputSpec;";
       std::shared_ptr<JHybridFaceDetectionOutputSpec> getJHybridFaceDetectionOutputSpec();
     };
     struct CxxPart: public jni::HybridClass<CxxPart, margelo::nitro::camera::JHybridCameraOutputSpec::CxxPart> {
-      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/facedetector/HybridFaceDetectionOutputSpec$CxxPart;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/noma4i/visioncamerafacedetector/HybridFaceDetectionOutputSpec$CxxPart;";
       static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
       static void registerNatives();
       using HybridBase::HybridBase;
@@ -65,4 +67,4 @@ namespace margelo::nitro::facedetector {
     jni::global_ref<JHybridFaceDetectionOutputSpec::JavaPart> _javaPart;
   };
 
-} // namespace margelo::nitro::facedetector
+} // namespace margelo::nitro::noma4i::visioncamerafacedetector

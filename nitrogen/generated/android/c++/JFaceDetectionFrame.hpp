@@ -13,7 +13,7 @@
 #include "FaceDetectionOrientation.hpp"
 #include "JFaceDetectionOrientation.hpp"
 
-namespace margelo::nitro::facedetector {
+namespace margelo::nitro::noma4i::visioncamerafacedetector {
 
   using namespace facebook;
 
@@ -22,7 +22,7 @@ namespace margelo::nitro::facedetector {
    */
   struct JFaceDetectionFrame final: public jni::JavaClass<JFaceDetectionFrame> {
   public:
-    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/facedetector/FaceDetectionFrame;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/noma4i/visioncamerafacedetector/FaceDetectionFrame;";
 
   public:
     /**
@@ -71,4 +71,4 @@ namespace margelo::nitro::facedetector {
     }
   };
 
-} // namespace margelo::nitro::facedetector
+} // namespace margelo::nitro::noma4i::visioncamerafacedetector

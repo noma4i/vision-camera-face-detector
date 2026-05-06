@@ -8,29 +8,29 @@
 #include "JHybridFaceDetectionOutputSpec.hpp"
 
 // Forward declaration of `FaceDetectorOptions` to properly resolve imports.
-namespace margelo::nitro::facedetector { struct FaceDetectorOptions; }
+namespace margelo::nitro::noma4i::visioncamerafacedetector { struct FaceDetectorOptions; }
 // Forward declaration of `FaceDetectorPerformanceMode` to properly resolve imports.
-namespace margelo::nitro::facedetector { enum class FaceDetectorPerformanceMode; }
+namespace margelo::nitro::noma4i::visioncamerafacedetector { enum class FaceDetectorPerformanceMode; }
 // Forward declaration of `FaceDetectorLandmarkMode` to properly resolve imports.
-namespace margelo::nitro::facedetector { enum class FaceDetectorLandmarkMode; }
+namespace margelo::nitro::noma4i::visioncamerafacedetector { enum class FaceDetectorLandmarkMode; }
 // Forward declaration of `FaceDetectorClassificationMode` to properly resolve imports.
-namespace margelo::nitro::facedetector { enum class FaceDetectorClassificationMode; }
+namespace margelo::nitro::noma4i::visioncamerafacedetector { enum class FaceDetectorClassificationMode; }
 // Forward declaration of `FaceDetectorContourMode` to properly resolve imports.
-namespace margelo::nitro::facedetector { enum class FaceDetectorContourMode; }
+namespace margelo::nitro::noma4i::visioncamerafacedetector { enum class FaceDetectorContourMode; }
 // Forward declaration of `FaceDetectionOutputResult` to properly resolve imports.
-namespace margelo::nitro::facedetector { struct FaceDetectionOutputResult; }
+namespace margelo::nitro::noma4i::visioncamerafacedetector { struct FaceDetectionOutputResult; }
 // Forward declaration of `DetectedFace` to properly resolve imports.
-namespace margelo::nitro::facedetector { struct DetectedFace; }
+namespace margelo::nitro::noma4i::visioncamerafacedetector { struct DetectedFace; }
 // Forward declaration of `DetectedFaceBounds` to properly resolve imports.
-namespace margelo::nitro::facedetector { struct DetectedFaceBounds; }
+namespace margelo::nitro::noma4i::visioncamerafacedetector { struct DetectedFaceBounds; }
 // Forward declaration of `FaceDetectionFrame` to properly resolve imports.
-namespace margelo::nitro::facedetector { struct FaceDetectionFrame; }
+namespace margelo::nitro::noma4i::visioncamerafacedetector { struct FaceDetectionFrame; }
 // Forward declaration of `FaceDetectionOrientation` to properly resolve imports.
-namespace margelo::nitro::facedetector { enum class FaceDetectionOrientation; }
+namespace margelo::nitro::noma4i::visioncamerafacedetector { enum class FaceDetectionOrientation; }
 // Forward declaration of `MediaType` to properly resolve imports.
-namespace margelo::nitro::facedetector { enum class MediaType; }
+namespace margelo::nitro::noma4i::visioncamerafacedetector { enum class MediaType; }
 // Forward declaration of `CameraOrientation` to properly resolve imports.
-namespace margelo::nitro::facedetector { enum class CameraOrientation; }
+namespace margelo::nitro::noma4i::visioncamerafacedetector { enum class CameraOrientation; }
 
 #include "FaceDetectorOptions.hpp"
 #include "JFaceDetectorOptions.hpp"
@@ -62,7 +62,7 @@ namespace margelo::nitro::facedetector { enum class CameraOrientation; }
 #include <VisionCamera/CameraOrientation.hpp>
 #include <VisionCamera/JCameraOrientation.hpp>
 
-namespace margelo::nitro::facedetector {
+namespace margelo::nitro::noma4i::visioncamerafacedetector {
 
   std::shared_ptr<JHybridFaceDetectionOutputSpec> JHybridFaceDetectionOutputSpec::JavaPart::getJHybridFaceDetectionOutputSpec() {
     auto hybridObject = JHybridObject::JavaPart::getJHybridObject();
@@ -117,4 +117,4 @@ namespace margelo::nitro::facedetector {
     method(_javaPart, onFacesDetected.has_value() ? JFunc_void_FaceDetectionOutputResult_cxx::fromCpp(onFacesDetected.value()) : nullptr);
   }
 
-} // namespace margelo::nitro::facedetector
+} // namespace margelo::nitro::noma4i::visioncamerafacedetector

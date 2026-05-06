@@ -17,14 +17,14 @@ def getExtOrIntegerDefault(name) {
 }
 
 android {
-  namespace "com.yupi.facedetector"
+  namespace = "com.noma4i.visioncamerafacedetector"
 
-  compileSdk getExtOrIntegerDefault("compileSdkVersion")
+  compileSdk = getExtOrIntegerDefault("compileSdkVersion")
 
   defaultConfig {
-    minSdk getExtOrIntegerDefault("minSdkVersion")
-    targetSdk getExtOrIntegerDefault("targetSdkVersion")
-    ndkVersion getExtOrDefault("ndkVersion")
+    minSdk = getExtOrIntegerDefault("minSdkVersion")
+    targetSdk = getExtOrIntegerDefault("targetSdkVersion")
+    ndkVersion = getExtOrDefault("ndkVersion")
 
     externalNativeBuild {
       cmake {
@@ -54,8 +54,8 @@ android {
   }
 
   buildFeatures {
-    buildConfig true
-    prefab true
+    buildConfig = true
+    prefab = true
   }
 
   compileOptions {

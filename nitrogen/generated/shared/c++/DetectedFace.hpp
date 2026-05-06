@@ -29,12 +29,12 @@
 #endif
 
 // Forward declaration of `DetectedFaceBounds` to properly resolve imports.
-namespace margelo::nitro::facedetector { struct DetectedFaceBounds; }
+namespace margelo::nitro::noma4i::visioncamerafacedetector { struct DetectedFaceBounds; }
 
 #include "DetectedFaceBounds.hpp"
 #include <optional>
 
-namespace margelo::nitro::facedetector {
+namespace margelo::nitro::noma4i::visioncamerafacedetector {
 
   /**
    * A struct which can be represented as a JavaScript object (DetectedFace).
@@ -52,23 +52,23 @@ namespace margelo::nitro::facedetector {
     friend bool operator==(const DetectedFace& lhs, const DetectedFace& rhs) = default;
   };
 
-} // namespace margelo::nitro::facedetector
+} // namespace margelo::nitro::noma4i::visioncamerafacedetector
 
 namespace margelo::nitro {
 
   // C++ DetectedFace <> JS DetectedFace (object)
   template <>
-  struct JSIConverter<margelo::nitro::facedetector::DetectedFace> final {
-    static inline margelo::nitro::facedetector::DetectedFace fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<margelo::nitro::noma4i::visioncamerafacedetector::DetectedFace> final {
+    static inline margelo::nitro::noma4i::visioncamerafacedetector::DetectedFace fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
-      return margelo::nitro::facedetector::DetectedFace(
-        JSIConverter<margelo::nitro::facedetector::DetectedFaceBounds>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "bounds"))),
+      return margelo::nitro::noma4i::visioncamerafacedetector::DetectedFace(
+        JSIConverter<margelo::nitro::noma4i::visioncamerafacedetector::DetectedFaceBounds>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "bounds"))),
         JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "trackingId")))
       );
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::facedetector::DetectedFace& arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::noma4i::visioncamerafacedetector::DetectedFace& arg) {
       jsi::Object obj(runtime);
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "bounds"), JSIConverter<margelo::nitro::facedetector::DetectedFaceBounds>::toJSI(runtime, arg.bounds));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "bounds"), JSIConverter<margelo::nitro::noma4i::visioncamerafacedetector::DetectedFaceBounds>::toJSI(runtime, arg.bounds));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "trackingId"), JSIConverter<std::optional<double>>::toJSI(runtime, arg.trackingId));
       return obj;
     }
@@ -80,7 +80,7 @@ namespace margelo::nitro {
       if (!nitro::isPlainObject(runtime, obj)) {
         return false;
       }
-      if (!JSIConverter<margelo::nitro::facedetector::DetectedFaceBounds>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "bounds")))) return false;
+      if (!JSIConverter<margelo::nitro::noma4i::visioncamerafacedetector::DetectedFaceBounds>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "bounds")))) return false;
       if (!JSIConverter<std::optional<double>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "trackingId")))) return false;
       return true;
     }

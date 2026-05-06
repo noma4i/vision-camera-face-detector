@@ -29,11 +29,11 @@
 #endif
 
 // Forward declaration of `FaceDetectionOrientation` to properly resolve imports.
-namespace margelo::nitro::facedetector { enum class FaceDetectionOrientation; }
+namespace margelo::nitro::noma4i::visioncamerafacedetector { enum class FaceDetectionOrientation; }
 
 #include "FaceDetectionOrientation.hpp"
 
-namespace margelo::nitro::facedetector {
+namespace margelo::nitro::noma4i::visioncamerafacedetector {
 
   /**
    * A struct which can be represented as a JavaScript object (FaceDetectionFrame).
@@ -54,28 +54,28 @@ namespace margelo::nitro::facedetector {
     friend bool operator==(const FaceDetectionFrame& lhs, const FaceDetectionFrame& rhs) = default;
   };
 
-} // namespace margelo::nitro::facedetector
+} // namespace margelo::nitro::noma4i::visioncamerafacedetector
 
 namespace margelo::nitro {
 
   // C++ FaceDetectionFrame <> JS FaceDetectionFrame (object)
   template <>
-  struct JSIConverter<margelo::nitro::facedetector::FaceDetectionFrame> final {
-    static inline margelo::nitro::facedetector::FaceDetectionFrame fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectionFrame> final {
+    static inline margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectionFrame fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
-      return margelo::nitro::facedetector::FaceDetectionFrame(
+      return margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectionFrame(
         JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "width"))),
         JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "height"))),
-        JSIConverter<margelo::nitro::facedetector::FaceDetectionOrientation>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "orientation"))),
+        JSIConverter<margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectionOrientation>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "orientation"))),
         JSIConverter<bool>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "isMirrored"))),
         JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "timestampMs")))
       );
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::facedetector::FaceDetectionFrame& arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectionFrame& arg) {
       jsi::Object obj(runtime);
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "width"), JSIConverter<double>::toJSI(runtime, arg.width));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "height"), JSIConverter<double>::toJSI(runtime, arg.height));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "orientation"), JSIConverter<margelo::nitro::facedetector::FaceDetectionOrientation>::toJSI(runtime, arg.orientation));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "orientation"), JSIConverter<margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectionOrientation>::toJSI(runtime, arg.orientation));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "isMirrored"), JSIConverter<bool>::toJSI(runtime, arg.isMirrored));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "timestampMs"), JSIConverter<double>::toJSI(runtime, arg.timestampMs));
       return obj;
@@ -90,7 +90,7 @@ namespace margelo::nitro {
       }
       if (!JSIConverter<double>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "width")))) return false;
       if (!JSIConverter<double>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "height")))) return false;
-      if (!JSIConverter<margelo::nitro::facedetector::FaceDetectionOrientation>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "orientation")))) return false;
+      if (!JSIConverter<margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectionOrientation>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "orientation")))) return false;
       if (!JSIConverter<bool>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "isMirrored")))) return false;
       if (!JSIConverter<double>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "timestampMs")))) return false;
       return true;

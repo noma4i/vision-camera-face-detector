@@ -1,4 +1,3 @@
-import type { HybridObject } from 'react-native-nitro-modules';
 import type { CameraOutput } from 'react-native-vision-camera';
 
 export type FaceDetectorPerformanceMode = 'fast' | 'accurate';
@@ -40,10 +39,6 @@ export interface FaceDetectionFrame {
 export interface FaceDetectionOutputResult {
   faces: DetectedFace[];
   frame: FaceDetectionFrame;
-}
-
-export interface FaceDetector extends HybridObject<{ ios: 'swift'; android: 'kotlin' }> {
-  configure(options: FaceDetectorOptions): void;
 }
 
 export interface FaceDetectionOutput extends CameraOutput {

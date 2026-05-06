@@ -29,20 +29,20 @@
 #endif
 
 // Forward declaration of `FaceDetectorPerformanceMode` to properly resolve imports.
-namespace margelo::nitro::facedetector { enum class FaceDetectorPerformanceMode; }
+namespace margelo::nitro::noma4i::visioncamerafacedetector { enum class FaceDetectorPerformanceMode; }
 // Forward declaration of `FaceDetectorLandmarkMode` to properly resolve imports.
-namespace margelo::nitro::facedetector { enum class FaceDetectorLandmarkMode; }
+namespace margelo::nitro::noma4i::visioncamerafacedetector { enum class FaceDetectorLandmarkMode; }
 // Forward declaration of `FaceDetectorClassificationMode` to properly resolve imports.
-namespace margelo::nitro::facedetector { enum class FaceDetectorClassificationMode; }
+namespace margelo::nitro::noma4i::visioncamerafacedetector { enum class FaceDetectorClassificationMode; }
 // Forward declaration of `FaceDetectorContourMode` to properly resolve imports.
-namespace margelo::nitro::facedetector { enum class FaceDetectorContourMode; }
+namespace margelo::nitro::noma4i::visioncamerafacedetector { enum class FaceDetectorContourMode; }
 
 #include "FaceDetectorPerformanceMode.hpp"
 #include "FaceDetectorLandmarkMode.hpp"
 #include "FaceDetectorClassificationMode.hpp"
 #include "FaceDetectorContourMode.hpp"
 
-namespace margelo::nitro::facedetector {
+namespace margelo::nitro::noma4i::visioncamerafacedetector {
 
   /**
    * A struct which can be represented as a JavaScript object (FaceDetectorOptions).
@@ -64,30 +64,30 @@ namespace margelo::nitro::facedetector {
     friend bool operator==(const FaceDetectorOptions& lhs, const FaceDetectorOptions& rhs) = default;
   };
 
-} // namespace margelo::nitro::facedetector
+} // namespace margelo::nitro::noma4i::visioncamerafacedetector
 
 namespace margelo::nitro {
 
   // C++ FaceDetectorOptions <> JS FaceDetectorOptions (object)
   template <>
-  struct JSIConverter<margelo::nitro::facedetector::FaceDetectorOptions> final {
-    static inline margelo::nitro::facedetector::FaceDetectorOptions fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorOptions> final {
+    static inline margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorOptions fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
-      return margelo::nitro::facedetector::FaceDetectorOptions(
-        JSIConverter<margelo::nitro::facedetector::FaceDetectorPerformanceMode>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "performanceMode"))),
-        JSIConverter<margelo::nitro::facedetector::FaceDetectorLandmarkMode>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "landmarkMode"))),
-        JSIConverter<margelo::nitro::facedetector::FaceDetectorClassificationMode>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "classificationMode"))),
-        JSIConverter<margelo::nitro::facedetector::FaceDetectorContourMode>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "contourMode"))),
+      return margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorOptions(
+        JSIConverter<margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorPerformanceMode>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "performanceMode"))),
+        JSIConverter<margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorLandmarkMode>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "landmarkMode"))),
+        JSIConverter<margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorClassificationMode>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "classificationMode"))),
+        JSIConverter<margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorContourMode>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "contourMode"))),
         JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "minFaceSize"))),
         JSIConverter<bool>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "enableTracking")))
       );
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::facedetector::FaceDetectorOptions& arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorOptions& arg) {
       jsi::Object obj(runtime);
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "performanceMode"), JSIConverter<margelo::nitro::facedetector::FaceDetectorPerformanceMode>::toJSI(runtime, arg.performanceMode));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "landmarkMode"), JSIConverter<margelo::nitro::facedetector::FaceDetectorLandmarkMode>::toJSI(runtime, arg.landmarkMode));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "classificationMode"), JSIConverter<margelo::nitro::facedetector::FaceDetectorClassificationMode>::toJSI(runtime, arg.classificationMode));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "contourMode"), JSIConverter<margelo::nitro::facedetector::FaceDetectorContourMode>::toJSI(runtime, arg.contourMode));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "performanceMode"), JSIConverter<margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorPerformanceMode>::toJSI(runtime, arg.performanceMode));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "landmarkMode"), JSIConverter<margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorLandmarkMode>::toJSI(runtime, arg.landmarkMode));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "classificationMode"), JSIConverter<margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorClassificationMode>::toJSI(runtime, arg.classificationMode));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "contourMode"), JSIConverter<margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorContourMode>::toJSI(runtime, arg.contourMode));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "minFaceSize"), JSIConverter<double>::toJSI(runtime, arg.minFaceSize));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "enableTracking"), JSIConverter<bool>::toJSI(runtime, arg.enableTracking));
       return obj;
@@ -100,10 +100,10 @@ namespace margelo::nitro {
       if (!nitro::isPlainObject(runtime, obj)) {
         return false;
       }
-      if (!JSIConverter<margelo::nitro::facedetector::FaceDetectorPerformanceMode>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "performanceMode")))) return false;
-      if (!JSIConverter<margelo::nitro::facedetector::FaceDetectorLandmarkMode>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "landmarkMode")))) return false;
-      if (!JSIConverter<margelo::nitro::facedetector::FaceDetectorClassificationMode>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "classificationMode")))) return false;
-      if (!JSIConverter<margelo::nitro::facedetector::FaceDetectorContourMode>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "contourMode")))) return false;
+      if (!JSIConverter<margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorPerformanceMode>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "performanceMode")))) return false;
+      if (!JSIConverter<margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorLandmarkMode>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "landmarkMode")))) return false;
+      if (!JSIConverter<margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorClassificationMode>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "classificationMode")))) return false;
+      if (!JSIConverter<margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorContourMode>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "contourMode")))) return false;
       if (!JSIConverter<double>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "minFaceSize")))) return false;
       if (!JSIConverter<bool>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "enableTracking")))) return false;
       return true;

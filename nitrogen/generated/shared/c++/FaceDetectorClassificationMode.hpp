@@ -23,7 +23,7 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
-namespace margelo::nitro::facedetector {
+namespace margelo::nitro::noma4i::visioncamerafacedetector {
 
   /**
    * An enum which can be represented as a JavaScript union (FaceDetectorClassificationMode).
@@ -33,26 +33,26 @@ namespace margelo::nitro::facedetector {
     ALL      SWIFT_NAME(all) = 1,
   } CLOSED_ENUM;
 
-} // namespace margelo::nitro::facedetector
+} // namespace margelo::nitro::noma4i::visioncamerafacedetector
 
 namespace margelo::nitro {
 
   // C++ FaceDetectorClassificationMode <> JS FaceDetectorClassificationMode (union)
   template <>
-  struct JSIConverter<margelo::nitro::facedetector::FaceDetectorClassificationMode> final {
-    static inline margelo::nitro::facedetector::FaceDetectorClassificationMode fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorClassificationMode> final {
+    static inline margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorClassificationMode fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       std::string unionValue = JSIConverter<std::string>::fromJSI(runtime, arg);
       switch (hashString(unionValue.c_str(), unionValue.size())) {
-        case hashString("none"): return margelo::nitro::facedetector::FaceDetectorClassificationMode::NONE;
-        case hashString("all"): return margelo::nitro::facedetector::FaceDetectorClassificationMode::ALL;
+        case hashString("none"): return margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorClassificationMode::NONE;
+        case hashString("all"): return margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorClassificationMode::ALL;
         default: [[unlikely]]
           throw std::invalid_argument("Cannot convert \"" + unionValue + "\" to enum FaceDetectorClassificationMode - invalid value!");
       }
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, margelo::nitro::facedetector::FaceDetectorClassificationMode arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorClassificationMode arg) {
       switch (arg) {
-        case margelo::nitro::facedetector::FaceDetectorClassificationMode::NONE: return JSIConverter<std::string>::toJSI(runtime, "none");
-        case margelo::nitro::facedetector::FaceDetectorClassificationMode::ALL: return JSIConverter<std::string>::toJSI(runtime, "all");
+        case margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorClassificationMode::NONE: return JSIConverter<std::string>::toJSI(runtime, "none");
+        case margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorClassificationMode::ALL: return JSIConverter<std::string>::toJSI(runtime, "all");
         default: [[unlikely]]
           throw std::invalid_argument("Cannot convert FaceDetectorClassificationMode to JS - invalid value: "
                                     + std::to_string(static_cast<int>(arg)) + "!");

@@ -1,28 +1,14 @@
 {
-  "cxxNamespace": ["facedetector"],
+  "cxxNamespace": ["noma4i", "visioncamerafacedetector"],
   "ios": {
     "iosModuleName": "VisionCameraFaceDetector"
   },
   "android": {
-    "androidNamespace": ["facedetector"],
+    "androidNamespace": ["noma4i", "visioncamerafacedetector"],
     "androidCxxLibName": "VisionCameraFaceDetector"
   },
   "autolinking": {
-    "FaceDetector": {
-      "ios": {
-        "language": "swift",
-        "implementationClassName": "HybridFaceDetector"
-      },
-      "android": {
-        "language": "kotlin",
-        "implementationClassName": "HybridFaceDetector"
-      }
-    },
     "FaceDetectionOutput": {
-      "ios": {
-        "language": "swift",
-        "implementationClassName": "HybridFaceDetectionOutput"
-      },
       "android": {
         "language": "kotlin",
         "implementationClassName": "HybridFaceDetectionOutput"

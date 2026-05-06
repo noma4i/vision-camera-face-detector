@@ -19,7 +19,7 @@
 #include "JFaceDetectorLandmarkMode.hpp"
 #include "JFaceDetectorPerformanceMode.hpp"
 
-namespace margelo::nitro::facedetector {
+namespace margelo::nitro::noma4i::visioncamerafacedetector {
 
   using namespace facebook;
 
@@ -28,7 +28,7 @@ namespace margelo::nitro::facedetector {
    */
   struct JFaceDetectorOptions final: public jni::JavaClass<JFaceDetectorOptions> {
   public:
-    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/facedetector/FaceDetectorOptions;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/noma4i/visioncamerafacedetector/FaceDetectorOptions;";
 
   public:
     /**
@@ -81,4 +81,4 @@ namespace margelo::nitro::facedetector {
     }
   };
 
-} // namespace margelo::nitro::facedetector
+} // namespace margelo::nitro::noma4i::visioncamerafacedetector

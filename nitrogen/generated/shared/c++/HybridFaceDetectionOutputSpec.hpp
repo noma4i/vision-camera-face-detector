@@ -14,9 +14,9 @@
 #endif
 
 // Forward declaration of `FaceDetectorOptions` to properly resolve imports.
-namespace margelo::nitro::facedetector { struct FaceDetectorOptions; }
+namespace margelo::nitro::noma4i::visioncamerafacedetector { struct FaceDetectorOptions; }
 // Forward declaration of `FaceDetectionOutputResult` to properly resolve imports.
-namespace margelo::nitro::facedetector { struct FaceDetectionOutputResult; }
+namespace margelo::nitro::noma4i::visioncamerafacedetector { struct FaceDetectionOutputResult; }
 // Forward declaration of `HybridCameraOutputSpec` to properly resolve imports.
 namespace margelo::nitro::camera { class HybridCameraOutputSpec; }
 
@@ -27,7 +27,7 @@ namespace margelo::nitro::camera { class HybridCameraOutputSpec; }
 #include <memory>
 #include <VisionCamera/HybridCameraOutputSpec.hpp>
 
-namespace margelo::nitro::facedetector {
+namespace margelo::nitro::noma4i::visioncamerafacedetector {
 
   using namespace margelo::nitro;
 
@@ -70,4 +70,4 @@ namespace margelo::nitro::facedetector {
       static constexpr auto TAG = "FaceDetectionOutput";
   };
 
-} // namespace margelo::nitro::facedetector
+} // namespace margelo::nitro::noma4i::visioncamerafacedetector

@@ -23,7 +23,7 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
-namespace margelo::nitro::facedetector {
+namespace margelo::nitro::noma4i::visioncamerafacedetector {
 
   /**
    * An enum which can be represented as a JavaScript union (FaceDetectorPerformanceMode).
@@ -33,26 +33,26 @@ namespace margelo::nitro::facedetector {
     ACCURATE      SWIFT_NAME(accurate) = 1,
   } CLOSED_ENUM;
 
-} // namespace margelo::nitro::facedetector
+} // namespace margelo::nitro::noma4i::visioncamerafacedetector
 
 namespace margelo::nitro {
 
   // C++ FaceDetectorPerformanceMode <> JS FaceDetectorPerformanceMode (union)
   template <>
-  struct JSIConverter<margelo::nitro::facedetector::FaceDetectorPerformanceMode> final {
-    static inline margelo::nitro::facedetector::FaceDetectorPerformanceMode fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorPerformanceMode> final {
+    static inline margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorPerformanceMode fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       std::string unionValue = JSIConverter<std::string>::fromJSI(runtime, arg);
       switch (hashString(unionValue.c_str(), unionValue.size())) {
-        case hashString("fast"): return margelo::nitro::facedetector::FaceDetectorPerformanceMode::FAST;
-        case hashString("accurate"): return margelo::nitro::facedetector::FaceDetectorPerformanceMode::ACCURATE;
+        case hashString("fast"): return margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorPerformanceMode::FAST;
+        case hashString("accurate"): return margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorPerformanceMode::ACCURATE;
         default: [[unlikely]]
           throw std::invalid_argument("Cannot convert \"" + unionValue + "\" to enum FaceDetectorPerformanceMode - invalid value!");
       }
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, margelo::nitro::facedetector::FaceDetectorPerformanceMode arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorPerformanceMode arg) {
       switch (arg) {
-        case margelo::nitro::facedetector::FaceDetectorPerformanceMode::FAST: return JSIConverter<std::string>::toJSI(runtime, "fast");
-        case margelo::nitro::facedetector::FaceDetectorPerformanceMode::ACCURATE: return JSIConverter<std::string>::toJSI(runtime, "accurate");
+        case margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorPerformanceMode::FAST: return JSIConverter<std::string>::toJSI(runtime, "fast");
+        case margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorPerformanceMode::ACCURATE: return JSIConverter<std::string>::toJSI(runtime, "accurate");
         default: [[unlikely]]
           throw std::invalid_argument("Cannot convert FaceDetectorPerformanceMode to JS - invalid value: "
                                     + std::to_string(static_cast<int>(arg)) + "!");

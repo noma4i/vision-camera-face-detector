@@ -23,7 +23,7 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
-namespace margelo::nitro::facedetector {
+namespace margelo::nitro::noma4i::visioncamerafacedetector {
 
   /**
    * An enum which can be represented as a JavaScript union (FaceDetectionOrientation).
@@ -35,30 +35,30 @@ namespace margelo::nitro::facedetector {
     LEFT      SWIFT_NAME(left) = 3,
   } CLOSED_ENUM;
 
-} // namespace margelo::nitro::facedetector
+} // namespace margelo::nitro::noma4i::visioncamerafacedetector
 
 namespace margelo::nitro {
 
   // C++ FaceDetectionOrientation <> JS FaceDetectionOrientation (union)
   template <>
-  struct JSIConverter<margelo::nitro::facedetector::FaceDetectionOrientation> final {
-    static inline margelo::nitro::facedetector::FaceDetectionOrientation fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectionOrientation> final {
+    static inline margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectionOrientation fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       std::string unionValue = JSIConverter<std::string>::fromJSI(runtime, arg);
       switch (hashString(unionValue.c_str(), unionValue.size())) {
-        case hashString("up"): return margelo::nitro::facedetector::FaceDetectionOrientation::UP;
-        case hashString("right"): return margelo::nitro::facedetector::FaceDetectionOrientation::RIGHT;
-        case hashString("down"): return margelo::nitro::facedetector::FaceDetectionOrientation::DOWN;
-        case hashString("left"): return margelo::nitro::facedetector::FaceDetectionOrientation::LEFT;
+        case hashString("up"): return margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectionOrientation::UP;
+        case hashString("right"): return margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectionOrientation::RIGHT;
+        case hashString("down"): return margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectionOrientation::DOWN;
+        case hashString("left"): return margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectionOrientation::LEFT;
         default: [[unlikely]]
           throw std::invalid_argument("Cannot convert \"" + unionValue + "\" to enum FaceDetectionOrientation - invalid value!");
       }
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, margelo::nitro::facedetector::FaceDetectionOrientation arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectionOrientation arg) {
       switch (arg) {
-        case margelo::nitro::facedetector::FaceDetectionOrientation::UP: return JSIConverter<std::string>::toJSI(runtime, "up");
-        case margelo::nitro::facedetector::FaceDetectionOrientation::RIGHT: return JSIConverter<std::string>::toJSI(runtime, "right");
-        case margelo::nitro::facedetector::FaceDetectionOrientation::DOWN: return JSIConverter<std::string>::toJSI(runtime, "down");
-        case margelo::nitro::facedetector::FaceDetectionOrientation::LEFT: return JSIConverter<std::string>::toJSI(runtime, "left");
+        case margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectionOrientation::UP: return JSIConverter<std::string>::toJSI(runtime, "up");
+        case margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectionOrientation::RIGHT: return JSIConverter<std::string>::toJSI(runtime, "right");
+        case margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectionOrientation::DOWN: return JSIConverter<std::string>::toJSI(runtime, "down");
+        case margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectionOrientation::LEFT: return JSIConverter<std::string>::toJSI(runtime, "left");
         default: [[unlikely]]
           throw std::invalid_argument("Cannot convert FaceDetectionOrientation to JS - invalid value: "
                                     + std::to_string(static_cast<int>(arg)) + "!");

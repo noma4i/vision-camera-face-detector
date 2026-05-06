@@ -25,7 +25,7 @@
 #include "FaceDetectionOrientation.hpp"
 #include "JFaceDetectionOrientation.hpp"
 
-namespace margelo::nitro::facedetector {
+namespace margelo::nitro::noma4i::visioncamerafacedetector {
 
   using namespace facebook;
 
@@ -35,7 +35,7 @@ namespace margelo::nitro::facedetector {
    */
   struct JFunc_void_FaceDetectionOutputResult: public jni::JavaClass<JFunc_void_FaceDetectionOutputResult> {
   public:
-    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/facedetector/Func_void_FaceDetectionOutputResult;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/noma4i/visioncamerafacedetector/Func_void_FaceDetectionOutputResult;";
 
   public:
     /**
@@ -71,7 +71,7 @@ namespace margelo::nitro::facedetector {
     }
 
   public:
-    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/facedetector/Func_void_FaceDetectionOutputResult_cxx;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/noma4i/visioncamerafacedetector/Func_void_FaceDetectionOutputResult_cxx;";
     static void registerNatives() {
       registerHybrid({makeNativeMethod("invoke_cxx", JFunc_void_FaceDetectionOutputResult_cxx::invoke_cxx)});
     }
@@ -84,4 +84,4 @@ namespace margelo::nitro::facedetector {
     std::function<void(const FaceDetectionOutputResult& /* result */)> _func;
   };
 
-} // namespace margelo::nitro::facedetector
+} // namespace margelo::nitro::noma4i::visioncamerafacedetector

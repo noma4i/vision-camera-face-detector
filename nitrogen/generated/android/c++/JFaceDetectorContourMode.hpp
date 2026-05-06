@@ -10,7 +10,7 @@
 #include <fbjni/fbjni.h>
 #include "FaceDetectorContourMode.hpp"
 
-namespace margelo::nitro::facedetector {
+namespace margelo::nitro::noma4i::visioncamerafacedetector {
 
   using namespace facebook;
 
@@ -19,7 +19,7 @@ namespace margelo::nitro::facedetector {
    */
   struct JFaceDetectorContourMode final: public jni::JavaClass<JFaceDetectorContourMode> {
   public:
-    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/facedetector/FaceDetectorContourMode;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/noma4i/visioncamerafacedetector/FaceDetectorContourMode;";
 
   public:
     /**
@@ -55,4 +55,4 @@ namespace margelo::nitro::facedetector {
     }
   };
 
-} // namespace margelo::nitro::facedetector
+} // namespace margelo::nitro::noma4i::visioncamerafacedetector

@@ -1,16 +1,17 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type RefObject } from 'react';
 import { useWindowDimensions } from 'react-native';
-import { NitroModules } from 'react-native-nitro-modules';
-import type { CameraOutput } from 'react-native-vision-camera';
+import type { CameraOutput, CameraRef } from 'react-native-vision-camera';
 import {
   applyGuideStability,
   defineFaceDetector,
   evaluateFaceDetection
 } from './core';
+import {
+  isPlatformFaceDetectorAvailable,
+  usePlatformFaceDetectionOutput
+} from './usePlatformFaceDetectionOutput';
 import type {
   DetectedFace,
-  FaceDetector,
-  FaceDetectionOutput,
   FaceDetectionOutputResult,
   FaceDetectorClassificationMode,
   FaceDetectorContourMode,
@@ -78,9 +79,9 @@ export interface UseFaceDetectorOptions extends FaceDetectorConfig {
 
 export interface UseFaceDetectorResult {
   camera: {
+    ref: RefObject<CameraRef | null>;
     outputs: CameraOutput[];
   };
-  output: FaceDetectionOutput | undefined;
   status: FaceGuideStatus;
   result: FaceDetectionResult;
   available: boolean;
@@ -99,28 +100,7 @@ const IDLE_RESULT: FaceDetectionResult = {
   status: 'idle'
 };
 
-const resolveDetector = (): FaceDetector | undefined => {
-  try {
-    return NitroModules.createHybridObject<FaceDetector>('FaceDetector');
-  } catch {
-    return undefined;
-  }
-};
-
-const detector: FaceDetector | undefined = resolveDetector();
-
-const createFaceDetectionOutput = (): FaceDetectionOutput | undefined => {
-  try {
-    return NitroModules.createHybridObject<FaceDetectionOutput>('FaceDetectionOutput');
-  } catch {
-    return undefined;
-  }
-};
-
-export const isFaceDetectorAvailable = (): boolean => {
-  if (!detector) return false;
-  return createFaceDetectionOutput() !== undefined;
-};
+export const isFaceDetectorAvailable = isPlatformFaceDetectorAvailable;
 
 const normalizeOutputs = (outputs: CameraOutput | CameraOutput[] | undefined): CameraOutput[] => {
   if (!outputs) return [];
@@ -148,27 +128,19 @@ const useStableOutputs = (
 export const useFaceDetector = (options: UseFaceDetectorOptions = {}): UseFaceDetectorResult => {
   const { preview = 'screen', outputs, ...config } = options;
   const window = useWindowDimensions();
+  const cameraRef = useRef<CameraRef | null>(null);
   const externalOutputs = useStableOutputs(outputs);
   const previewWidth = preview === 'screen' ? window.width : preview.width;
   const previewHeight = preview === 'screen' ? window.height : preview.height;
   const configKey = JSON.stringify(config);
   const normalizedConfig = useMemo(() => defineFaceDetector(config), [configKey]);
-  const output = useMemo(() => createFaceDetectionOutput(), []);
-  const isAvailable = output !== undefined;
-  const [result, setResult] = useState<FaceDetectionResult>(
-    isAvailable ? IDLE_RESULT : UNAVAILABLE_RESULT
-  );
+  const [result, setResult] = useState<FaceDetectionResult>(IDLE_RESULT);
   const stabilityStateRef = useRef<FaceGuideStabilityState>({
-    currentStatus: isAvailable ? 'idle' : 'unavailable',
+    currentStatus: 'idle',
     readySamples: 0,
     resetSamples: 0,
     lastTransitionAt: 0
   });
-
-  useEffect(() => {
-    if (!output) return;
-    output.configure(normalizedConfig.nativeOptions, normalizedConfig.fps);
-  }, [normalizedConfig.fps, normalizedConfig.nativeOptions, output]);
 
   const applyDetectionResult = useCallback(
     (nativeResult: FaceDetectionOutputResult) => {
@@ -195,27 +167,56 @@ export const useFaceDetector = (options: UseFaceDetectorOptions = {}): UseFaceDe
     [normalizedConfig, previewHeight, previewWidth]
   );
 
+  const platformOutput = usePlatformFaceDetectionOutput({
+    cameraRef,
+    fps: normalizedConfig.fps,
+    nativeOptions: normalizedConfig.nativeOptions,
+    preview: { width: previewWidth, height: previewHeight },
+    onResult: applyDetectionResult
+  });
+  const isAvailable = platformOutput.available;
+
   useEffect(() => {
-    if (!output || !isAvailable) return;
-    output.setOnFacesDetectedCallback(applyDetectionResult);
-    return () => {
-      output.setOnFacesDetectedCallback(undefined);
+    if (isAvailable) {
+      if (stabilityStateRef.current.currentStatus === 'unavailable') {
+        stabilityStateRef.current = {
+          currentStatus: 'idle',
+          readySamples: 0,
+          resetSamples: 0,
+          lastTransitionAt: 0
+        };
+        setResult(IDLE_RESULT);
+      }
+      return;
+    }
+
+    stabilityStateRef.current = {
+      currentStatus: 'unavailable',
+      readySamples: 0,
+      resetSamples: 0,
+      lastTransitionAt: 0
     };
-  }, [applyDetectionResult, isAvailable, output]);
+    setResult(UNAVAILABLE_RESULT);
+  }, [isAvailable]);
 
   const status = isAvailable ? result.status : 'unavailable';
+  const visibleResult = isAvailable ? result : UNAVAILABLE_RESULT;
   const cameraOutputs = useMemo<CameraOutput[]>(
-    () => (isAvailable && output ? [...externalOutputs, output] : externalOutputs),
-    [externalOutputs, isAvailable, output]
+    () => (
+      isAvailable && platformOutput.output
+        ? [...externalOutputs, platformOutput.output]
+        : externalOutputs
+    ),
+    [externalOutputs, isAvailable, platformOutput.output]
   );
 
   return {
     camera: {
+      ref: cameraRef,
       outputs: cameraOutputs
     },
-    output: isAvailable ? output : undefined,
     status,
-    result,
+    result: visibleResult,
     available: isAvailable,
     ready: status === 'ready'
   };

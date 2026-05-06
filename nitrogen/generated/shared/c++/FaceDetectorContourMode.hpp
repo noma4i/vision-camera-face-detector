@@ -23,7 +23,7 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
-namespace margelo::nitro::facedetector {
+namespace margelo::nitro::noma4i::visioncamerafacedetector {
 
   /**
    * An enum which can be represented as a JavaScript union (FaceDetectorContourMode).
@@ -33,26 +33,26 @@ namespace margelo::nitro::facedetector {
     ALL      SWIFT_NAME(all) = 1,
   } CLOSED_ENUM;
 
-} // namespace margelo::nitro::facedetector
+} // namespace margelo::nitro::noma4i::visioncamerafacedetector
 
 namespace margelo::nitro {
 
   // C++ FaceDetectorContourMode <> JS FaceDetectorContourMode (union)
   template <>
-  struct JSIConverter<margelo::nitro::facedetector::FaceDetectorContourMode> final {
-    static inline margelo::nitro::facedetector::FaceDetectorContourMode fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorContourMode> final {
+    static inline margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorContourMode fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       std::string unionValue = JSIConverter<std::string>::fromJSI(runtime, arg);
       switch (hashString(unionValue.c_str(), unionValue.size())) {
-        case hashString("none"): return margelo::nitro::facedetector::FaceDetectorContourMode::NONE;
-        case hashString("all"): return margelo::nitro::facedetector::FaceDetectorContourMode::ALL;
+        case hashString("none"): return margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorContourMode::NONE;
+        case hashString("all"): return margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorContourMode::ALL;
         default: [[unlikely]]
           throw std::invalid_argument("Cannot convert \"" + unionValue + "\" to enum FaceDetectorContourMode - invalid value!");
       }
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, margelo::nitro::facedetector::FaceDetectorContourMode arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorContourMode arg) {
       switch (arg) {
-        case margelo::nitro::facedetector::FaceDetectorContourMode::NONE: return JSIConverter<std::string>::toJSI(runtime, "none");
-        case margelo::nitro::facedetector::FaceDetectorContourMode::ALL: return JSIConverter<std::string>::toJSI(runtime, "all");
+        case margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorContourMode::NONE: return JSIConverter<std::string>::toJSI(runtime, "none");
+        case margelo::nitro::noma4i::visioncamerafacedetector::FaceDetectorContourMode::ALL: return JSIConverter<std::string>::toJSI(runtime, "all");
         default: [[unlikely]]
           throw std::invalid_argument("Cannot convert FaceDetectorContourMode to JS - invalid value: "
                                     + std::to_string(static_cast<int>(arg)) + "!");

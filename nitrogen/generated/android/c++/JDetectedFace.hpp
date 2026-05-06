@@ -14,7 +14,7 @@
 #include "JDetectedFaceBounds.hpp"
 #include <optional>
 
-namespace margelo::nitro::facedetector {
+namespace margelo::nitro::noma4i::visioncamerafacedetector {
 
   using namespace facebook;
 
@@ -23,7 +23,7 @@ namespace margelo::nitro::facedetector {
    */
   struct JDetectedFace final: public jni::JavaClass<JDetectedFace> {
   public:
-    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/facedetector/DetectedFace;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/noma4i/visioncamerafacedetector/DetectedFace;";
 
   public:
     /**
@@ -60,4 +60,4 @@ namespace margelo::nitro::facedetector {
     }
   };
 
-} // namespace margelo::nitro::facedetector
+} // namespace margelo::nitro::noma4i::visioncamerafacedetector
