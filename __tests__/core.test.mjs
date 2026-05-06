@@ -28,10 +28,16 @@ test('defineFaceDetector defaults to the selfie DSL', () => {
   const config = defineFaceDetector();
 
   assert.equal(config.preset, 'selfie');
-  assert.equal(config.fps, 8);
+  assert.equal(config.fps, 12);
   assert.equal(config.nativeOptions.performanceMode, 'accurate');
   assert.equal(config.nativeOptions.enableTracking, true);
   assert.equal(config.guide?.shape, 'circle');
+  assert.equal(config.guide?.tolerancePx, 40);
+  assert.deepEqual(config.stability, {
+    readySamples: 1,
+    resetSamples: 3,
+    minTransitionMs: 180
+  });
 });
 
 test('defineFaceDetector supports guide shortcuts', () => {
@@ -41,6 +47,30 @@ test('defineFaceDetector supports guide shortcuts', () => {
   assert.equal(withoutGuide.guide, undefined);
   assert.equal(selfieGuide.preset, 'fast');
   assert.equal(selfieGuide.guide?.shape, 'circle');
+});
+
+test('evaluateFaceDetection treats guide none as face presence readiness', () => {
+  const config = defineFaceDetector({ guide: 'none' });
+  const noFace = evaluateFaceDetection(
+    {
+      faces: [],
+      frame: { width: 100, height: 100 },
+      preview: { width: 100, height: 100 }
+    },
+    config
+  );
+  const withFace = evaluateFaceDetection(
+    {
+      faces: [{ bounds: { x: 10, y: 10, width: 20, height: 20 } }],
+      frame: { width: 100, height: 100 },
+      preview: { width: 100, height: 100 }
+    },
+    config
+  );
+
+  assert.equal(noFace.status, 'idle');
+  assert.equal(withFace.status, 'ready');
+  assert.equal(withFace.isInsideGuide, false);
 });
 
 test('pickPrimaryFace returns the largest face by bounds area', () => {
@@ -75,6 +105,32 @@ test('evaluateFaceDetection maps frame bounds into preview guide state', () => {
   assert.deepEqual(result.primaryFaceCenter, { x: 300, y: 300 });
 });
 
+test('evaluateFaceDetection accepts iOS view-space bounds without extra scaling', () => {
+  const config = defineFaceDetector({
+    guide: {
+      shape: 'circle',
+      units: 'px',
+      centerX: 500,
+      centerY: 500,
+      size: 400,
+      tolerancePx: 0
+    }
+  });
+  const result = evaluateFaceDetection(
+    {
+      faces: [{ bounds: { x: 380, y: 380, width: 240, height: 240 }, trackingId: 7 }],
+      frame: { width: 1000, height: 1000 },
+      preview: { width: 1000, height: 1000 }
+    },
+    config
+  );
+
+  assert.equal(result.status, 'ready');
+  assert.equal(result.isInsideGuide, true);
+  assert.deepEqual(result.primaryFaceRect, { x: 380, y: 380, width: 240, height: 240 });
+  assert.equal(result.primaryFace?.trackingId, 7);
+});
+
 test('evaluateFaceDetection rejects partial face overlap with guide', () => {
   const config = defineFaceDetector({
     guide: {
@@ -99,6 +155,40 @@ test('evaluateFaceDetection rejects partial face overlap with guide', () => {
   assert.equal(result.status, 'misaligned');
   assert.equal(result.isInsideGuide, false);
   assert.deepEqual(result.primaryFaceCenter, { x: 400, y: 400 });
+});
+
+test('evaluateFaceDetection checks circle guides as circles, not bounding squares', () => {
+  const config = defineFaceDetector({
+    guide: {
+      shape: 'circle',
+      units: 'px',
+      centerX: 100,
+      centerY: 100,
+      size: 100,
+      tolerancePx: 0
+    }
+  });
+  const cornerOfBoundingSquare = evaluateFaceDetection(
+    {
+      faces: [{ bounds: { x: 50, y: 50, width: 20, height: 20 } }],
+      frame: { width: 200, height: 200 },
+      preview: { width: 200, height: 200 }
+    },
+    config
+  );
+  const insideCircle = evaluateFaceDetection(
+    {
+      faces: [{ bounds: { x: 90, y: 90, width: 20, height: 20 } }],
+      frame: { width: 200, height: 200 },
+      preview: { width: 200, height: 200 }
+    },
+    config
+  );
+
+  assert.equal(cornerOfBoundingSquare.status, 'misaligned');
+  assert.equal(cornerOfBoundingSquare.isInsideGuide, false);
+  assert.equal(insideCircle.status, 'ready');
+  assert.equal(insideCircle.isInsideGuide, true);
 });
 
 test('applyGuideStability requires ready samples and reset samples', () => {

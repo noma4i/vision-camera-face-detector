@@ -125,7 +125,7 @@ export const DEFAULT_FACE_GUIDE: FaceGuideConfig = {
   centerX: 0.5,
   centerY: 0.42,
   size: 0.72,
-  tolerancePx: 24
+  tolerancePx: 40
 };
 
 const DEFAULT_NATIVE_OPTIONS: FaceDetectorOptions = {
@@ -154,13 +154,13 @@ const PRESET_NATIVE_OPTIONS: Record<FaceDetectorPreset, FaceDetectorOptions> = {
 const PRESET_FPS: Record<FaceDetectorPreset, number> = {
   fast: 12,
   accurate: 8,
-  selfie: 8
+  selfie: 12
 };
 
 const PRESET_STABILITY: NormalizedFaceDetectorConfig['stability'] = {
-  readySamples: 2,
-  resetSamples: 4,
-  minTransitionMs: 400
+  readySamples: 1,
+  resetSamples: 3,
+  minTransitionMs: 180
 };
 
 const clamp = (value: number, min: number, max: number): number => {
@@ -332,6 +332,35 @@ const containsRect = (outer: FaceRect, inner: FaceRect, tolerancePx: number): bo
   inner.y + inner.height <= outer.y + outer.height + tolerancePx
 );
 
+const containsRectInCircle = (circleBounds: FaceRect, inner: FaceRect, tolerancePx: number): boolean => {
+  const center = centerOf(circleBounds);
+  const radius = circleBounds.width * 0.5 + tolerancePx;
+  const maxDistanceSq = radius * radius;
+  const corners = [
+    { x: inner.x, y: inner.y },
+    { x: inner.x + inner.width, y: inner.y },
+    { x: inner.x, y: inner.y + inner.height },
+    { x: inner.x + inner.width, y: inner.y + inner.height }
+  ];
+
+  return corners.every((corner) => {
+    const dx = corner.x - center.x;
+    const dy = corner.y - center.y;
+    return dx * dx + dy * dy <= maxDistanceSq;
+  });
+};
+
+const containsGuideRect = (
+  guide: FaceGuideConfig,
+  guideRect: FaceRect,
+  faceRect: FaceRect,
+  tolerancePx: number
+): boolean => (
+  guide.shape === 'circle'
+    ? containsRectInCircle(guideRect, faceRect, tolerancePx)
+    : containsRect(guideRect, faceRect, tolerancePx)
+);
+
 export const evaluateFaceDetection = (
   input: FaceDetectionInput,
   config: NormalizedFaceDetectorConfig
@@ -354,9 +383,10 @@ export const evaluateFaceDetection = (
   const isInsideGuide = Boolean(
     primaryFaceRect &&
       guideRect &&
+      config.guide &&
       primaryFaceCenter &&
       containsPoint(guideRect, primaryFaceCenter, tolerancePx) &&
-      containsRect(guideRect, primaryFaceRect, tolerancePx)
+      containsGuideRect(config.guide, guideRect, primaryFaceRect, tolerancePx)
   );
 
   return {
