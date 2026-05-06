@@ -1,10 +1,10 @@
 # @noma4i/vision-camera-face-detector
 
-Nitro CameraOutput face detection for VisionCamera V5.
+Face detection DSL for VisionCamera V5.
 
-- iOS: Apple `Vision`, no MLKit Pods
-- Android: MLKit Face Detection
-- JS: one hook returns ready-to-pass `Camera` outputs and guide status
+- iOS: VisionCamera V5 `ObjectOutput`, no package Pods
+- Android: Nitro `CameraOutput` + MLKit Face Detection
+- JS: one hook returns ready-to-pass `Camera` props and guide status
 - No worklets, no frame processors, no manual native wiring
 
 ## Installation
@@ -37,6 +37,7 @@ Add camera permission text:
 ### Android
 
 Minimum SDK: **21**.
+Runtime classes are packaged under `com.noma4i.visioncamerafacedetector`; Nitro-generated bridge classes keep Nitro's required `com.margelo.nitro.*` base.
 
 ```xml
 <uses-permission android:name="android.permission.CAMERA" />
@@ -83,7 +84,7 @@ const canTakePhoto = face.ready;
 
 ### `useFaceDetector(config?)`
 
-The hook creates the native face-detection output, appends it to your camera outputs, projects detected bounds into preview space, and stabilizes guide status.
+The hook creates the platform face-detection output, appends it to your camera outputs, injects the camera ref required by iOS coordinate conversion, projects detected bounds into preview space, and stabilizes guide status.
 
 ```ts
 const face = useFaceDetector({
@@ -96,12 +97,11 @@ Return:
 
 | Field | Type | Notes |
 | --- | --- | --- |
-| `camera` | `{ outputs: CameraOutput[] }` | Spread into `<Camera {...face.camera} />`. |
+| `camera` | `{ ref: RefObject<CameraRef \| null>; outputs: CameraOutput[] }` | Spread into `<Camera {...face.camera} />`. |
 | `status` | `'unavailable' \| 'idle' \| 'misaligned' \| 'ready'` | Stable guide status. |
 | `ready` | `boolean` | `status === 'ready'`. |
-| `available` | `boolean` | Native module and output are linked. |
+| `available` | `boolean` | Platform output is available. |
 | `result` | `FaceDetectionResult` | Faces, primary face, projected rects, guide state. |
-| `output` | `FaceDetectionOutput \| undefined` | Advanced escape hatch. Most apps should use `camera`. |
 
 Config:
 
@@ -113,7 +113,7 @@ Config:
 | `guide` | `'selfie' \| 'none' \| circle/rect config` | selfie preset gets `'selfie'` |
 | `fps` | `number` | preset-specific, clamped to 1-60 |
 | `android` | MLKit options | preset-specific |
-| `stability` | `{ readySamples; resetSamples; minTransitionMs }` | `{ 2, 4, 400 }` |
+| `stability` | `{ readySamples; resetSamples; minTransitionMs }` | `{ 1, 3, 180 }` |
 
 ### Presets
 
@@ -121,9 +121,10 @@ Config:
 
 - accurate Android mode
 - tracking enabled on Android
-- native scanning at 8 FPS
+- native scanning at 12 FPS
 - default circular guide
 - strict readiness: the full detected face bounds must fit inside the guide
+- circular guides use the actual circle, not the bounding square
 
 `fast` and `accurate` are lower-level presets for custom UIs. They do not add a guide unless you pass one.
 
@@ -147,7 +148,7 @@ const face = useFaceDetector({
     centerX: screenWidth / 2,
     centerY: 360,
     size: 320,
-    tolerancePx: 24
+    tolerancePx: 40
   }
 });
 ```
@@ -159,6 +160,8 @@ const face = useFaceDetector({
   guide: 'none'
 });
 ```
+
+With `guide: 'none'`, `face.ready` means at least one face is detected.
 
 ### Android Tuning
 
@@ -190,7 +193,7 @@ interface DetectedFace {
 }
 ```
 
-`trackingId` is Android-only. iOS returns Apple Vision rectangles and does not synthesize fake ids.
+`trackingId` is Android MLKit tracking id or iOS VisionCamera `faceID`.
 
 Pure helpers are exported for custom UI and tests:
 
@@ -205,7 +208,7 @@ applyGuideStability
 
 ## Nitro Codegen
 
-The package ships generated bindings. If you edit `src/specs/FaceDetector.nitro.ts`, regenerate:
+The package ships Android generated bindings. If you edit `src/specs/FaceDetector.nitro.ts`, regenerate:
 
 ```bash
 npm run nitrogen
