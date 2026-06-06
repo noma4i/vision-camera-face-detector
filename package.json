@@ -1,6 +1,6 @@
 {
   "name": "@noma4i/vision-camera-face-detector",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Face detection DSL for VisionCamera V5. iOS: VisionCamera ObjectOutput, Android: Nitro MLKit.",
   "source": "src/index",
   "main": "lib/index.js",
@@ -48,11 +48,14 @@
   "homepage": "https://github.com/noma4i/vision-camera-face-detector#readme",
   "author": "noma4i",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "peerDependencies": {
     "react": "*",
     "react-native": "*",
     "react-native-nitro-modules": "*",
-    "react-native-vision-camera": ">=5.0.0"
+    "react-native-vision-camera": ">=5.0.11"
   },
   "devDependencies": {
     "@types/react": "^19.2.0",
@@ -60,7 +63,7 @@
     "react": "^19.2.0",
     "react-native": "^0.85.0",
     "react-native-nitro-modules": "^0.35.4",
-    "react-native-vision-camera": "^5.0.4",
+    "react-native-vision-camera": "^5.0.11",
     "typescript": "^5.9.3"
   }
 }

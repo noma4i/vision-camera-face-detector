@@ -15,6 +15,8 @@ yarn add @noma4i/vision-camera-face-detector react-native-vision-camera react-na
 
 VisionCamera V5 requires a bare React Native app. Expo prebuild works; Expo Go does not.
 
+Requires `react-native-vision-camera >= 5.0.11`: the Android `FaceDetectionOutput` implements VisionCamera's `currentResolution` output member, which became a required part of the Nitro camera-output contract in 5.0.11.
+
 ### iOS
 
 Minimum deployment target: **iOS 15.5**.

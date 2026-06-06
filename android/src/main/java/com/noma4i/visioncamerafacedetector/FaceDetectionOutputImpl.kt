@@ -11,6 +11,8 @@ import com.google.mlkit.vision.face.FaceDetectorOptions as MLKitFaceDetectorOpti
 import com.margelo.nitro.camera.CameraOrientation as VisionCameraOrientation
 import com.margelo.nitro.camera.MediaType
 import com.margelo.nitro.camera.MirrorMode
+import com.margelo.nitro.camera.Size
+import com.margelo.nitro.camera.extensions.converters.toSize
 import com.margelo.nitro.camera.extensions.orientation
 import com.margelo.nitro.camera.extensions.surfaceRotation
 import com.margelo.nitro.camera.public.NativeCameraOutput
@@ -41,6 +43,8 @@ open class FaceDetectionOutputImpl :
       field = value
       imageAnalysis?.targetRotation = value.surfaceRotation
     }
+  override val currentResolution: Size?
+    get() = imageAnalysis?.resolutionInfo?.resolution?.toSize()
   override var mirrorMode: MirrorMode = MirrorMode.AUTO
 
   private var currentOptions: FaceDetectorOptions = defaultOptions()

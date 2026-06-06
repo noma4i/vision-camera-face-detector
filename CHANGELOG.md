@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.1] - 2026-06-06
+
+### Fixed
+- Android: implement the now-required `currentResolution` output member on `FaceDetectionOutput`. react-native-vision-camera's Nitro-generated `HybridCameraOutputSpec` (the base of `HybridFaceDetectionOutputSpec`) declares `currentResolution` as an abstract member from 5.0.11, so the Kotlin source failed to compile against newer VisionCamera until the member was provided.
+
+### Changed
+- Raise the `react-native-vision-camera` peer dependency floor to `>=5.0.11` to reflect the `currentResolution` output contract.
+
 ## [3.0.0] - 2026-05-06
 
 ### Added
